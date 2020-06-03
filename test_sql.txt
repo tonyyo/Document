@@ -1,0 +1,165 @@
+1、 DDL
+
+drop table if exists customer;
+drop table if exists item;
+drop table if exists buy;
+drop table if exists expensive_item;
+drop table if exists cheap_item;
+
+create table customer (custid int primary key, custname varchar(20), age int) partition by HASH(custid) using hash;
+insert into customer(custid, custname, age) values (1, 'Zhang', 10), (2, 'Li', 20), (3,'Wang', 30), (4,'Zhao', 40);
+
+
+create table item (itemid int primary key, itemname varchar(100), price decimal ) partition by HASH(Itemid) using hash;
+insert into item(itemid, itemname, price) values (1, 'Candy', 5), (2, 'Milk', 10), (3, 'Toy', 20);
+
+
+create table buy (custid int, itemid int) partition by HASH(custid) using binary_md5;
+insert into buy (custid, itemid) values (1, 1), (1, 2), (2, 1), (2, 3), (3, 1), (3, 2), (4, 3);
+
+
+create table expensive_item (itemid int primary key) partition by HASH(itemid) using binary_md5;
+create table cheap_item(itemid int, itemname varchar(100), price decimal) partition by HASH(itemid) using binary_md5;
+
+
+drop table if exists `_kundb_sequence_metadata`;
+CREATE TABLE `_kundb_sequence_metadata` (
+ `sequence_name` varchar(200) NOT NULL PRIMARY KEY,
+ `next_not_cached_value` bigint(21) NOT NULL DEFAULT 1,
+ `minimum_value` bigint(21) NOT NULL DEFAULT 1,
+ `maximum_value` bigint(21) NOT NULL DEFAULT 9223372036854775806,
+ `start_value` bigint(21) NOT NULL DEFAULT 1 COMMENT 'start value when sequences is created or value if RESTART is used',
+ `increment` bigint(21) NOT NULL DEFAULT 1 COMMENT 'increment value',
+ `cache_size` bigint(21) unsigned NOT NULL DEFAULT 100,
+ `cycle_option` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '0 if no cycles are allowed, 1 if the sequence should begin a new cycle when maximum_value is passed',
+ `cycle_count` bigint(21) NOT NULL DEFAULT 0 COMMENT 'How many cycles have been done',
+ `_next_n_values` bigint(21) NOT NULL DEFAULT 0 COMMENT 'Special flag for kundb',
+ `_next_n_values_param` bigint(21) NOT NULL DEFAULT 0 COMMENT 'Special param for kundb'
+) partition by hash(sequence_name) using binary_md5;
+
+
+2、增删改查
+insert into customer(custid, custname, age) values (5, 'Qian', 50);
+delete from customer where custid = 4;
+update customer set age = 80 where custid = 1;
+select custid `customer_id`, custname `customer_name` from customer  where age > 20;     // 不会发到mfed
+
+
+3、多表关联
+select custname, itemname from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid;    // 多表关联发到mfed
+
+4、分组统计
+select c.custid `customer_id`, sum(price) `expense` from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid group by c.custid;    // 发到mfed
+
+
+5、排序
+select * from item order by price desc;   // 简单排序不会发到mfed
+
+
+6、数据分页
+select custid `customer_id`, custname `customer_name` from customer  where age > 20 limit 2;     // 简单分页不会发到mfed
+
+SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t;     // 不支持这样的分页，下面的更不支持
+SELECT x.custid, x.custname, x.age from (SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t) x where x.rn >=0 and x.rn<=2;
+
+7、事务
+事务A:
+begin;
+insert into item(itemid, itemname, price) values (901, 'Fruit', 10);
+update item set price = -10 where itemid = 1;
+select * from item;
+
+事务B: 查询item(无法查询到事务A未提交到的数据)
+begin;
+select * from item;
+
+情形一：事务A rollback
+rollback;
+select * from item;
+
+情形二：事务B commit
+commit;
+select * from item;
+
+8、sequence
+drop sequence seq1;
+create sequence seq1 start with 100 cache 20;      //  不会发达mfed，vtgate自己生成查询计划
+select next value for seq1;（多次调用这句sql，返回的结果都是100）
+
+9、用户自定义函数
+CREATE FUNCTION hello (s CHAR(20))     
+RETURNS CHAR(50) DETERMINISTIC 
+RETURN CONCAT('Hello, ',s,'!');
+
+select hello(custname) from customer;
+
+
+10、定义触发器   
+	MySQL 的触发器和存储过程一样，都是嵌入到 MySQL 中的一段程序，是 MySQL 中管理数据的有力工具。不同的是执行存储过程要使用 CALL 语句来调用，而触发器的执行不需要使用 CALL 语句来调用，也不需要手工启动，而是通过对数据表的相关操作来触发、激活从而实现执行。
+	主要用于保护表中的数据。特别是当有多个表具有一定的相互联系的时候，触发器能够让不同的表保持数据的一致性。
+	在 MySQL 中，只有执行 INSERT、UPDATE 和 DELETE 操作时才能激活触发器，其它 SQL 语句则不会激活触发器
+// 当插入item表前，把价格大于100的物品插入expensive_item表	   
+delimiter $$
+drop trigger IF exists Tri_Item_Insert$$
+CREATE Trigger Tri_Item_Insert Before Insert On item For Each Row  
+Begin
+    if (NEW.price > 100) then
+        insert into expensive_item (itemid) values(NEW.itemid);
+        end if;
+End
+$$
+delimiter ;
+
+
+insert into item(itemid, itemname, price) values (4, 'Computer', 200), (5, 'Cola', 3), (6, 'Phone', 300);
+-- 可以看到Computer和Phone两条记录。
+select itemname from expensive_item, item where expensive_item.itemid = item.itemid;
+
+
+11、存储过程    
+	存储过程是一组为了完成特定功能的 SQL 语句集合。。使用存储过程的目的是将常用或复杂的工作预先用 SQL 语句写好并用一个指定名称存储起来，这个过程经编译和优化后存储在数据库服务器中，因此称为存储过程。当以后需要数据库提供与已定义好的存储过程的功能相同的服务时，只需调用“CALL存储过程名字”即可自动完成。
+	一个存储过程是一个可编程的函数，它在数据库中创建并保存，一般由 SQL 语句和一些特殊的控制结构组成。当希望在不同的应用程序或平台上执行相同的特定功能时，存储过程尤为合适。ALTER PROCEDURE 语句用于修改存储过程的某些特征。如果要修改存储过程的内容，可以先删除原存储过程，再以相同的命名创建新的存储过程；如果要修改存储过程的名称，可以先删除原存储过程，再以不同的命名创建新的存储过程。
+	存储过程的信息都存储在 information_schema 数据库下的 Routines 表中，可以通过查询该表的记录来查询存储过程的信息，SQL 语句如下：
+	SELECT * FROM information_schema.Routines WHERE ROUTINE_NAME=存储过程名;
+
+	在 information_schema 数据库下的 routines 表中，存储着所有存储过程的定义。所以，使用 SELECT 语句查询 routines 表中的存储过程和函数的定义时，一定要使用 routine_name 字段指定存储过程的名称，否则，将查询出所有的存储过程的定义。
+
+ // 将item表中价格小于30的物品插入cheap_item表    
+drop procedure if exists find_cheap_items;
+delimiter $$
+create procedure find_cheap_items() MODIFIES SQL DATA   
+begin
+    DECLARE done int default FALSE;
+    DECLARE v_id decimal;
+    DECLARE v_name VARCHAR(50);
+    DECLARE v_price decimal;
+    DECLARE  all_items Cursor for Select itemid, itemname, price From item where price < 30;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN all_items;
+    read_loop: LOOP
+        FETCH all_items INTO v_id, v_name, v_price;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        insert into cheap_item (itemid, itemname, price) values (v_id, v_name, v_price);
+        commit;
+        ITERATE read_loop;
+    END LOOP;
+    CLOSE  all_items;
+end $$
+delimiter ;
+
+select * from cheap_item;
+call find_cheap_items();
+
+
+
+
+12、添加外键
+
+create table parent(id INT not null, primary key (id));
+create table child(
+  `id` int(0) not null,
+  `parent_id` int(0) not null,
+  primary key (`id`),
+  foreign key (`parent_id`) references `parent` (`id`) on delete restrict on update restrict);

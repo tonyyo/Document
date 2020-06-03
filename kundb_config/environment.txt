@@ -1,0 +1,1 @@
+VTROOT=/home/transwarp/gopath;MYSQL_FLAVOR=MySQL56;VTDATAROOT=/home/transwarp/gopath/vtdataroot;GOROOT=/usr/local/go

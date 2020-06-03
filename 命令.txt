@@ -1,0 +1,62 @@
+scp root@107.172.27.254:/home/test.txt .   //下载文件
+
+scp test.txt root@107.172.27.254:/home  //上传文件
+
+scp -r root@107.172.27.254:/home/test .  //下载目录
+
+scp -r test root@107.172.27.254:/home   //上传目录
+
+ssh root@172.26.0.93  // 远程登录
+
+
+docker ps  // 查看容器
+docker images  //查看镜像
+docker run -it -name [指定容器名称] [镜像名称] /bin/bah    // 创建容器并进入命令行界面
+docker exec -it [command ID] /bin/bash   // 进入容器命令行界面
+docker stop [command ID]   //  停止容器
+docker rm -f [command ID]   // 删除容器
+
+$VTROOT  == $GOPATH
+$VTTOP  == $kunHome(vitess目录）
+
+gk   //到vietess目录下
+gkd  //到vtdataroot目录下
+
+pgrep -f abc 匹配出含abc的进程 并输出进程的pid
+
+pkill -f abc 杀掉含abc的所有进程
+
+ctrl + shift + E ： 打开最近更改的文件
+
+ctrl + G：定位行
+
+vi与shell切换
+:shell 可以在不关闭vi的情况下切换到shell命令行
+:exit 从shell回到vi
+
+横向切割窗口
+:split+窗口名，也可以简写为:sp+窗口名
+纵向切割窗口名
+:vsplit+窗口名，也可以简写为：vsp+窗口名
+双击ctrl+w依次切换窗口。
+:e 在该窗口打开文件
+
+git log --name-only 查看该文件最近的修改是谁
+
+mysql -uroot -pTranswarp! -P17100 -h127.0.0.1   // 进mysql
+
+git stash 暂存到栈中
+git pop 出栈
+git list 查看栈中内容
+
+git reset --hard commit-id  回退到该版本
+
+端口：
+pub_gate: 端口15001， grpc端口15991， mysql连接端口15307
+priv_gate: 端口15002, grpc端口15992， mysql链接端口15306
+tablet-800：端口15800， grpc端口16800， mysql链接端口17800
+
+
+
+
+
