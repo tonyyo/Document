@@ -75,14 +75,7 @@ vitess不支持show warnings，会将select当做update、delete、insert一样�
 
 SHOW WARNINGS输出中的Message值显示优化器如何限定SELECT语句中的表名和列名，应用重写和优化规则后SELECT的外观以及有关优化过程的其他注意事项。
 
-不知道kundb是否支持show table status，反正vitess支持
-
-
 
 sql.y
 新建explain_statement, 将explicit语法从other_statement语句中摘出来
-
-
-explain explainable statement 应该发到底层第一个shard，而不是发达mfed，因为mfed里面少了partition 和 filter两列。
-
 

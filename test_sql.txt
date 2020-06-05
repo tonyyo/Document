@@ -1,4 +1,6 @@
 1、 DDL
+create database db;
+use db
 
 drop table if exists customer;
 drop table if exists item;
@@ -46,20 +48,20 @@ select custid `customer_id`, custname `customer_name` from customer  where age >
 
 
 3、多表关联
-select custname, itemname from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid;    // 多表关联发到mfed
+select custname, itemname from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid;   
 
 4、分组统计
-select c.custid `customer_id`, sum(price) `expense` from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid group by c.custid;    // 发到mfed
+select c.custid `customer_id`, sum(price) `expense` from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid group by c.custid;   
 
 
 5、排序
 select * from item order by price desc;   // 简单排序不会发到mfed
-
+[(1, "SIMPLE", "item", "NULL", "ALL", "NULL", "NULL", "NULL", "NULL", 3, Decimal("100.00"), "Using filesort")]
 
 6、数据分页
 select custid `customer_id`, custname `customer_name` from customer  where age > 20 limit 2;     // 简单分页不会发到mfed
 
-SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t;     // 不支持这样的分页，下面的更不支持
+SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t;    
 SELECT x.custid, x.custname, x.age from (SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t) x where x.rn >=0 and x.rn<=2;
 
 7、事务
@@ -93,17 +95,18 @@ RETURN CONCAT('Hello, ',s,'!');
 
 select hello(custname) from customer;
 
+[(1, "SIMPLE", "customer", "ALL", "NULL", "NULL", "NULL", NULL", 8, None)]
 
 10、定义触发器   
 	MySQL 的触发器和存储过程一样，都是嵌入到 MySQL 中的一段程序，是 MySQL 中管理数据的有力工具。不同的是执行存储过程要使用 CALL 语句来调用，而触发器的执行不需要使用 CALL 语句来调用，也不需要手工启动，而是通过对数据表的相关操作来触发、激活从而实现执行。
 	主要用于保护表中的数据。特别是当有多个表具有一定的相互联系的时候，触发器能够让不同的表保持数据的一致性。
 	在 MySQL 中，只有执行 INSERT、UPDATE 和 DELETE 操作时才能激活触发器，其它 SQL 语句则不会激活触发器
-// 当插入item表前，把价格大于100的物品插入expensive_item表	   
+// 当插入item表前，把价格大于100的物品插入expensive_item表
+drop trigger IF exists Tri_Item_Insert$$	   
 delimiter $$
-drop trigger IF exists Tri_Item_Insert$$
-CREATE Trigger Tri_Item_Insert Before Insert On item For Each Row  
+CREATE OR REPLACE Trigger Tri_Item_Insert Before Insert On item For Each Row  
 Begin
-    if (NEW.price > 100) then
+    if (NEW.price > 200) then
         insert into expensive_item (itemid) values(NEW.itemid);
         end if;
 End
@@ -149,10 +152,10 @@ begin
 end $$
 delimiter ;
 
-select * from cheap_item;
 call find_cheap_items();
+select * from cheap_item;
 
-
+[(1, "Candy", 5),(2, "Milk", 10),(3, "Toy", 20)]
 
 
 12、添加外键
