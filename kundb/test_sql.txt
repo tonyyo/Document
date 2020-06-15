@@ -200,7 +200,7 @@ select * from cheap_item;
 create database db;
 use db
 create table parent(id INT not null, primary key (id));
-create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`), constraint `test` foreign key (`parent_id`) references `parent` (`id`) on delete restrict on update restrict); 
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`), constraint `test` foreign key (`parent_id`) references db.parent(`id`) on delete restrict on update restrict); 
 alter table child drop foreign key test;
 
 
@@ -225,6 +225,47 @@ insert into test values(11, 'longfei'),(21, 'test');
 update test set name='test' where id=8; 	
 
 
+14、range partition 
 
 
+CREATE TABLE sbtest2 (
+
+id int 
+
+) engine=INNODB PARTITION BY RANGE (id )
+
+( PARTITION p0 VALUES LESS THAN (2000),
+
+PARTITION p1 VALUES LESS THAN (4000) ,
+
+PARTITION p2 VALUES LESS THAN (6000) ,
+
+PARTITION p3 VALUES LESS THAN (8000) ,
+
+PARTITION p4 VALUES LESS THAN (10000) ,
+
+PARTITION p5 VALUES LESS THAN (12000) ,
+
+PARTITION p6 VALUES LESS THAN (14000) ,
+
+PARTITION p7 VALUES LESS THAN (16000) ,
+
+PARTITION p8 VALUES LESS THAN (18000) ,
+
+PARTITION p9 VALUES LESS THAN (20000)) ;
+
+
+
+DELIMITER $$
+CREATE PROCEDURE `produceData2`()
+BEGIN
+   DECLARE i INT DEFAULT 0;
+   WHILE i <= 2000 DO
+     INSERT INTO  `sbtest2` VALUES(1);
+     SET i=i+1;
+   END WHILE;
+END$$
+DELIMITER ;
+
+call produceData2();
 
