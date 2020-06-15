@@ -1,4 +1,8 @@
 1、 DDL
+
+KUNDB
+_________________________________________________
+
 create database db;
 use db
 
@@ -8,7 +12,7 @@ drop table if exists buy;
 drop table if exists expensive_item;
 drop table if exists cheap_item;
 
-create table customer (custid int primary key, custname varchar(20), age int) partition by HASH(custid) using hash;
+create table customer (custid int primary key, custname varchar(20), age int)  ;
 insert into customer(custid, custname, age) values (1, 'Zhang', 10), (2, 'Li', 20), (3,'Wang', 30), (4,'Zhao', 40);
 
 
@@ -22,6 +26,7 @@ insert into buy (custid, itemid) values (1, 1), (1, 2), (2, 1), (2, 3), (3, 1), 
 
 create table expensive_item (itemid int primary key) partition by HASH(itemid) using binary_md5;
 create table cheap_item(itemid int, itemname varchar(100), price decimal) partition by HASH(itemid) using binary_md5;
+
 
 
 drop table if exists `_kundb_sequence_metadata`;
@@ -38,6 +43,37 @@ CREATE TABLE `_kundb_sequence_metadata` (
  `_next_n_values` bigint(21) NOT NULL DEFAULT 0 COMMENT 'Special flag for kundb',
  `_next_n_values_param` bigint(21) NOT NULL DEFAULT 0 COMMENT 'Special param for kundb'
 ) partition by hash(sequence_name) using binary_md5;
+
+
+
+MARIADB
+_______________________________________________
+
+create database db;
+use db
+
+drop table if exists customer;
+drop table if exists item;
+drop table if exists buy;
+drop table if exists expensive_item;
+drop table if exists cheap_item;
+
+create table customer (custid int primary key, custname varchar(20), age int) partition by HASH(custid);
+insert into customer(custid, custname, age) values (1, 'Zhang', 10), (2, 'Li', 20), (3,'Wang', 30), (4,'Zhao', 40);
+
+
+create table item (itemid int primary key, itemname varchar(100), price decimal ) partition by HASH(Itemid);
+insert into item(itemid, itemname, price) values (1, 'Candy', 5), (2, 'Milk', 10), (3, 'Toy', 20);
+
+
+create table buy (custid int, itemid int) partition by HASH(custid);
+insert into buy (custid, itemid) values (1, 1), (1, 2), (2, 1), (2, 3), (3, 1), (3, 2), (4, 3);
+
+
+create table expensive_item (itemid int primary key) partition by HASH(itemid);
+create table cheap_item(itemid int, itemname varchar(100), price decimal) partition by HASH(itemid);
+
+
 
 
 2、增删改查
@@ -102,9 +138,8 @@ select hello(custname) from customer;
 	主要用于保护表中的数据。特别是当有多个表具有一定的相互联系的时候，触发器能够让不同的表保持数据的一致性。
 	在 MySQL 中，只有执行 INSERT、UPDATE 和 DELETE 操作时才能激活触发器，其它 SQL 语句则不会激活触发器
 // 当插入item表前，把价格大于100的物品插入expensive_item表
-drop trigger IF exists Tri_Item_Insert$$	   
 delimiter $$
-CREATE OR REPLACE Trigger Tri_Item_Insert Before Insert On item For Each Row  
+create Trigger Tri_Item_Insert Before Insert On item For Each Row  
 Begin
     if (NEW.price > 200) then
         insert into expensive_item (itemid) values(NEW.itemid);
@@ -113,6 +148,7 @@ End
 $$
 delimiter ;
 
+drop trigger IF exists Tri_Item_Insert;	   
 
 insert into item(itemid, itemname, price) values (4, 'Computer', 200), (5, 'Cola', 3), (6, 'Phone', 300);
 -- 可以看到Computer和Phone两条记录。
@@ -128,9 +164,10 @@ select itemname from expensive_item, item where expensive_item.itemid = item.ite
 	在 information_schema 数据库下的 routines 表中，存储着所有存储过程的定义。所以，使用 SELECT 语句查询 routines 表中的存储过程和函数的定义时，一定要使用 routine_name 字段指定存储过程的名称，否则，将查询出所有的存储过程的定义。
 
  // 将item表中价格小于30的物品插入cheap_item表    
-drop procedure if exists find_cheap_items;
+drop procedure if exists db.find_cheap_items;
+
 delimiter $$
-create procedure find_cheap_items() MODIFIES SQL DATA   
+create or replace procedure FIND_CHEAP_ITEMS() MODIFIES SQL DATA   
 begin
     DECLARE done int default FALSE;
     DECLARE v_id decimal;
@@ -160,9 +197,34 @@ select * from cheap_item;
 
 12、添加外键
 
+create database db;
+use db
 create table parent(id INT not null, primary key (id));
-create table child(
-  `id` int(0) not null,
-  `parent_id` int(0) not null,
-  primary key (`id`),
-  foreign key (`parent_id`) references `parent` (`id`) on delete restrict on update restrict);
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`), constraint `test` foreign key (`parent_id`) references `parent` (`id`) on delete restrict on update restrict); 
+alter table child drop foreign key test;
+
+
+alter table child add constraint fkk foreign key fk(id) references db.parent(id);
+alter table db.child add foreign key fk(id) references db.parent(id);
+alter table db.child drop foreign key fkk;
+
+==============================================================
+
+create database db;
+use db
+create table parent(id INT not null, primary key (id));
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)) partition by hash(id) using hash; 
+alter table child add foreign key fk(id) references parent(id);
+
+
+13、update
+create database db;
+use db
+create table test(id int primary key, name varchar(20)) partition by hash(id);
+insert into test values(11, 'longfei'),(21, 'test');
+update test set name='test' where id=8; 	
+
+
+
+
+
