@@ -220,7 +220,7 @@ alter table child add foreign key fk(id) references parent(id);
 13、update
 create database db;
 use db
-create table test(id int primary key, name varchar(20)) partition by hash(id);
+create table test(id int primary key, name varchar(20)) partition by hash(id) using hash;
 insert into test values(11, 'longfei'),(21, 'test');
 update test set name='test' where id=8; 	
 

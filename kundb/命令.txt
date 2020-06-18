@@ -56,10 +56,15 @@ pub_gate: 端口15001， grpc端口15991， mysql连接端口15307
 priv_gate: 端口15002, grpc端口15992， mysql链接端口15306
 tablet-800：端口15800， grpc端口16800， mysql链接端口17800
 
-
 git checkout -b 分支名 origin/分支名  // 从一个分支上创建一个新分支
 git log -p  分支名  // 查看该分支的日志
 
+git 拉取他人分支
+git remote add repoName repoAddress
+git fetch repoName
+gcb newBranch repoName/selectBranch
+
+python mysqlgroupby_test.py -v --skip-build --keep-logs --skip-teardown
 
 
 
