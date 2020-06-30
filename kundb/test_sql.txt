@@ -297,7 +297,7 @@ DELIMITER $$
 CREATE PROCEDURE `produceData`()
 BEGIN
    DECLARE i INT DEFAULT 0;
-   WHILE i <= 20000000 DO
+   WHILE i <= 2000 DO
      INSERT INTO  `sbtest1` VALUES(i, i, "vincent", "tonyoyo");
      SET i=i+1;
    END WHILE;
