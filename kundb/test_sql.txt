@@ -75,7 +75,7 @@ create table cheap_item(itemid int, itemname varchar(100), price decimal) partit
 
 
 
-
+==========================================================================================
 2、增删改查
 insert into customer(custid, custname, age) values (5, 'Qian', 50);
 delete from customer where custid = 4;
@@ -83,23 +83,30 @@ update customer set age = 80 where custid = 1;
 select custid `customer_id`, custname `customer_name` from customer  where age > 20;     // 不会发到mfed
 
 
+==========================================================================================
 3、多表关联
 select custname, itemname from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid;   
 
+==========================================================================================
 4、分组统计
 select c.custid `customer_id`, sum(price) `expense` from customer c, buy b, item i where c.custid = b.custid and b.itemid = i.itemid group by c.custid;   
 
 
+==========================================================================================
 5、排序
 select * from item order by price desc;   // 简单排序不会发到mfed
 [(1, "SIMPLE", "item", "NULL", "ALL", "NULL", "NULL", "NULL", "NULL", 3, Decimal("100.00"), "Using filesort")]
 
+
+==========================================================================================
 6、数据分页
 select custid `customer_id`, custname `customer_name` from customer  where age > 20 limit 2;     // 简单分页不会发到mfed
 
 SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t;    
 SELECT x.custid, x.custname, x.age from (SELECT @rn := @rn+1 AS rn, t.*  FROM (SELECT @rn:=0) r, customer t) x where x.rn >=0 and x.rn<=2;
 
+
+==========================================================================================
 7、事务
 事务A:
 begin;
@@ -119,11 +126,16 @@ select * from item;
 commit;
 select * from item;
 
+
+==========================================================================================
 8、sequence
 drop sequence seq1;
 create sequence seq1 start with 100 cache 20;      //  不会发达mfed，vtgate自己生成查询计划
 select next value for seq1;（多次调用这句sql，返回的结果都是100）
 
+
+
+==========================================================================================
 9、用户自定义函数
 CREATE FUNCTION hello (s CHAR(20))     
 RETURNS CHAR(50) DETERMINISTIC 
@@ -133,6 +145,9 @@ select hello(custname) from customer;
 
 [(1, "SIMPLE", "customer", "ALL", "NULL", "NULL", "NULL", NULL", 8, None)]
 
+
+
+==========================================================================================
 10、定义触发器   
 	MySQL 的触发器和存储过程一样，都是嵌入到 MySQL 中的一段程序，是 MySQL 中管理数据的有力工具。不同的是执行存储过程要使用 CALL 语句来调用，而触发器的执行不需要使用 CALL 语句来调用，也不需要手工启动，而是通过对数据表的相关操作来触发、激活从而实现执行。
 	主要用于保护表中的数据。特别是当有多个表具有一定的相互联系的时候，触发器能够让不同的表保持数据的一致性。
@@ -155,6 +170,9 @@ insert into item(itemid, itemname, price) values (4, 'Computer', 200), (5, 'Cola
 select itemname from expensive_item, item where expensive_item.itemid = item.itemid;
 
 
+
+
+==========================================================================================
 11、存储过程    
 	存储过程是一组为了完成特定功能的 SQL 语句集合。。使用存储过程的目的是将常用或复杂的工作预先用 SQL 语句写好并用一个指定名称存储起来，这个过程经编译和优化后存储在数据库服务器中，因此称为存储过程。当以后需要数据库提供与已定义好的存储过程的功能相同的服务时，只需调用“CALL存储过程名字”即可自动完成。
 	一个存储过程是一个可编程的函数，它在数据库中创建并保存，一般由 SQL 语句和一些特殊的控制结构组成。当希望在不同的应用程序或平台上执行相同的特定功能时，存储过程尤为合适。ALTER PROCEDURE 语句用于修改存储过程的某些特征。如果要修改存储过程的内容，可以先删除原存储过程，再以相同的命名创建新的存储过程；如果要修改存储过程的名称，可以先删除原存储过程，再以不同的命名创建新的存储过程。
@@ -195,12 +213,15 @@ select * from cheap_item;
 [(1, "Candy", 5),(2, "Milk", 10),(3, "Toy", 20)]
 
 
+
+
+==========================================================================================
 12、添加外键
 
 create database db;
 use db
-create table parent(id INT not null, primary key (id));
-create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`), constraint `test` foreign key (`parent_id`) references db.parent(`id`) on delete restrict on update restrict); 
+create table parent(id INT not null, primary key (id)) partition by HASH(id) using hash;
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)) partition by HASH(id) using hash; 
 alter table child drop foreign key test;
 
 
@@ -208,7 +229,7 @@ alter table child add constraint fkk foreign key fk(id) references db.parent(id)
 alter table db.child add foreign key fk(id) references db.parent(id);
 alter table db.child drop foreign key fkk;
 
-==============================================================
+------------------------------------------------------------------------------------------
 
 create database db;
 use db
@@ -217,6 +238,7 @@ create table child(`id` int(0) not null, `parent_id` int(0) not null, primary ke
 alter table child add foreign key fk(id) references parent(id);
 
 
+==========================================================================================
 13、update
 create database db;
 use db
@@ -225,6 +247,7 @@ insert into test values(11, 'longfei'),(21, 'test');
 update test set name='test' where id=8; 	
 
 
+==========================================================================================
 14、range partition 
 
 
@@ -256,16 +279,75 @@ PARTITION p9 VALUES LESS THAN (20000)) ;
 
 
 
+==========================================================================================
+15、造数据
+
+create database db;
+use db
+CREATE TABLE `sbtest1` (
+`id` int(11) NOT NULL,
+`k` int(11) NOT NULL DEFAULT '0',
+`c` char(120) NOT NULL DEFAULT '',
+`pad` char(60) NOT NULL DEFAULT '',
+PRIMARY KEY (`id`),
+KEY `k_1` (`k`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY HASH(id) USING binary_md5;
+
 DELIMITER $$
-CREATE PROCEDURE `produceData2`()
+CREATE PROCEDURE `produceData`()
 BEGIN
    DECLARE i INT DEFAULT 0;
-   WHILE i <= 2000 DO
-     INSERT INTO  `sbtest2` VALUES(1);
+   WHILE i <= 20000000 DO
+     INSERT INTO  `sbtest1` VALUES(i, i, "vincent", "tonyoyo");
      SET i=i+1;
    END WHILE;
 END$$
 DELIMITER ;
 
-call produceData2();
+call produceData();
+
+select * from sbtest1 where id between 140 and 150;
+explain select * from sbtest1 where id between 90 and 10;
+
+==========================================================================================
+
+16、alter_table_test
+create database s1;
+use s1
+create table t1 (a int primary key, b int, c varchar(20)) partition by hash(a) using hash;
+create table t2 (d int primary key);
+create table t3 (a1 int primary key, b1 int, c1 int) partition by hash(a1) using hash;
+create table t4 (id int, name varchar(20));
+create table parent(id INT not null, primary key (id));
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`), constraint `test` foreign key (`parent_id`) references `parent` (`id`) on delete restrict on update restrict);
+create table test1(id1 int, id2 int);
+create table test2(id1 int, id2 int);
+
+insert into t1 values(1, 2, 'te2');
+insert into t1 values(2, 3, 'te3');
+insert into t2 values(1);
+insert into t2 values(2);
+insert into t3 values(1, 2, 3);
+insert into t3 values(2, 3, 3);
+
+alter table t1 drop primary key;
+alter table s1.t1 add primary key(a);
+alter table t2 drop primary key;
+alter table s1.t2 add primary key(d);
+alter table t3 drop primary key;
+alter table s1.t3 add primary key(a1);
+alter table t1 add constraint uniq_b unique key u_b(b);
+alter table t1 add constraint uniq_c unique u_c(c);
+alter table t3 add constraint uniq_b unique(b1);
+alter table child drop foreign key test;
+alter table child drop key test;
+alter table child add constraint fkk foreign key fk(id) references s1.parent(id);
+alter table s1.child add constraint fka foreign key fk(id) references s1.parent(id);
+alter table s1.child drop foreign key fkk;
+alter table test1 add constraint p primary key (id1);
+alter table test1 add constraint u unique (id2);
+alter table test2 add primary key (id1);
+alter table test2 add constraint uniq1 unique key (id2);
+alter table t1 change b bb varchar(20) after c;
+alter table t3 modify c1 varchar(10) not null first;
 
