@@ -351,3 +351,16 @@ alter table test2 add constraint uniq1 unique key (id2);
 alter table t1 change b bb varchar(20) after c;
 alter table t3 modify c1 varchar(10) not null first;
 
+==========================================================================================
+
+17、view
+create database db;
+use db
+create table t1(id int);
+create view v1 as select * from t1;
+show table status;
+create database db2;
+use db2
+create table t2(id int);
+create view v2 as select * from t2;
+show table status from db where comment='view';

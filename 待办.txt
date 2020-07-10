@@ -1,0 +1,38 @@
+create database db;
+use db
+create table item (id int primary key, name varchar(20), price int) partition by HASH(id) using binary_md5;
+insert into item values(1, 'a', 100),(2, 'b', 20),(3, 'c',300),(4,'d',200);
+insert into item (id, name, price) values(4,'d',50) on duplicate key update id=id+100;
+
+
+CREATE TABLE music( 
+   user_id BIGINT,
+   music_id BIGINT
+) PARTITION BY HASH(user_id) USING hash;
+
+CREATE TABLE music_extra( 
+  id BIGINT,
+  annual_fee BIGINT,
+  PRIMARY KEY(id),
+  CONSTRAINT music_extra_pk PARTITION KEY(id) REFERENCES music(music_id)
+) PARTITION BY REFERENCE(music_extra_pk);
+
+
+周末代办：
+待学习、mysql笔记总结、大疆题目总结、k8s、kafka、docker
+
+
+create database db;
+use db
+create table db.t1(id int);
+insert db.t1 values(1);
+select * from db.t1;
+create table db.t2(id int, name varchar(20)) partition by hash(id) using hash;
+
+create table db.parent(id INT not null, primary key (id)) partition by HASH(id) using hash;
+create table db.child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)); 
+
+alter table db.child add constraint fkk foreign key fk(parent_id) references db.parent(id);
+alter table db.child drop foreign key fkk;
+alter table db.child drop index fkk;
+

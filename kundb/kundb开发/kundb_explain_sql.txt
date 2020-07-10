@@ -1,0 +1,81 @@
+mysql5.7 Explain 官方语法：
+{EXPLAIN | DESCRIBE | DESC}
+    tbl_name [col_name | wild]  // mysql和vitess都不支持后两种
+
+{EXPLAIN | DESCRIBE | DESC}
+    [explain_type]
+    {explainable_stmt | FOR CONNECTION connection_id}  // 后者类似与show processlist 外加 指明ID
+
+explain_type: {
+    EXTENDED                      // 为了获得warnings信息，8.0舍去
+  | PARTITIONS			  // 8.0舍去
+  | FORMAT = format_name          // 这个也是为了show warinings而存在的
+}
+
+format_name: {
+    TRADITIONAL
+  | JSON
+}
+
+explainable_stmt: {
+    SELECT statement
+  | DELETE statement
+  | INSERT statement
+  | REPLACE statement
+  | UPDATE statement
+}
+
+
+mysql8.0 Explain 官方语法：
+
+{EXPLAIN | DESCRIBE | DESC}
+    tbl_name [col_name | wild]
+
+{EXPLAIN | DESCRIBE | DESC}
+    [explain_type]
+    {explainable_stmt | FOR CONNECTION connection_id}
+
+{EXPLAIN | DESCRIBE | DESC} ANALYZE select_statement    
+
+explain_type: {
+    FORMAT = format_name
+}
+
+format_name: {
+    TRADITIONAL
+  | JSON
+  | TREE    // 8.0 新添
+}
+
+explainable_stmt: {   // vitess只支持crud
+    SELECT statement
+  | TABLE statement     // 8.0 新添
+  | DELETE statement
+  | INSERT statement
+  | REPLACE statement
+  | UPDATE statement
+}
+
+
+
+
+mysql对describe和explain做相同处理：
+主要用于:
+Obtaining Table Structure Information  // kundb只支持这个，发到mfed上执行
+
+Obtaining Execution Plan Information from explainable statement  # 从优化器中获取
+
+Obtaining Information with EXPLAIN ANALYZE // 8.0新添
+
+kundb都不支持。
+
+describe tablename === show columns from tablename // 不知道kundb是否支持， 反正vitess支持
+
+vitess不支持show warnings，会将select当做update、delete、insert一样对待，返回空。案例来说应该要支持，反正都是发到mysql去的。
+
+SHOW WARNINGS输出中的Message值显示优化器如何限定SELECT语句中的表名和列名，应用重写和优化规则后SELECT的外观以及有关优化过程的其他注意事项。
+
+
+sql.y
+新建explain_statement, 将explicit语法从other_statement语句中摘出来
+

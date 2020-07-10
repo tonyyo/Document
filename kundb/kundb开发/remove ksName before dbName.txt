@@ -1,0 +1,76 @@
+GenerateInternalDBName:
+1、server.go:
+	256/262: 	--> RegisterDatabase、RegisterTablesInDatabase	(其中的每个方法都用到了该函数, 用于在server上注册fake db和表）
+2、schemautil.go:
+	134: 		--> ProcessShowCreateRes			(这个函数kundb没有用到）
+3、ast.go:
+	1276: 		--> GetIndexDDLSQL				(create index idx on s1.t1(id)) 
+	3360: 		-->  (node *DatabaseSpec) Format 		(当show没有加from db的时候，自动补全，并带上ksName前缀）
+	3399: 		--> (node *TableFromSpec) Format 		(当show table时，加上ksName.dbName前缀）
+4、vtexplain_vttablet.go:
+	162/184/185/208  --> initTabletEnvironment			(初始化Tablet环境时，在用到的数据库和表名前加上ksName)
+5、execute.go:
+	988/989  	--> genSecondaryVIndexSQL			(创建二级索引表时加上了ksName.dbName前缀）
+	1359   		--> genNewDDLQueries				(将建表语句的parition部分移除时，给新的sql语句表名前补上了ksName.dbname前缀）
+	3230   		--> genSchemaDDLQueries				(schema DDL时，加上了ksName前缀）
+	3239   		--> genSchemaDCLQueries				(给用户赋数据库操作权限时，数据库前加上ksName前缀）
+	3885   		--> transLikeToTable				(create like语句时，用show出来的语句创建新表时，加上了ksName.dbname前缀）
+	3999   		--> handleOtherDDL				(当ddl中table前缀不为空时，加上了ksName前缀）
+	4208/4214  	--> createLike					(create table s1.t like s1.t2)
+	4321		--> createNormalTable				(当ddl中table前缀不为空时，加上了ksName前缀）
+	4345		--> genSQLWithInternalQualifier			(直接给DDL语句的表加上了ksName.dbname前缀）
+	4608/4612/4621	--> handleTableAlter				(当ddl中table前缀不为空时，加上了ksName前缀）
+	5099		--> forceDropTable				(当ddl中table前缀不为空时，加上了ksName前缀)
+	5469		--> showCreateTable				(当ddl中table前缀不为空时，加上了ksName前缀)
+	5772		--> showTableStatus				(DatabaseSpec不为空时，加上了ksName.dbname前缀）
+	6618		--> handleOther					(当sql中table前缀不为空时，加上了ksName前缀)
+6、table_scan.go:
+	61		--> getFullSchema				(当TableScan的tableName前缀不为空时）
+7、from.go:
+	122		--> processTableScan				(给表名的前缀赋值时，加上了ksName.dbName前缀）
+8、insert.go:
+	52 		--> buildInsertPlan				(给表名的前缀赋值时，加上了ksName.dbName前缀）
+9、scatter_conn.go:
+	148		--> Execute
+	229		--> ExecuteMultiShard
+	288		--> ExecuteSingleShard
+	561		--> StreamExecute
+	598		--> StreamExecuteMulti 				(都是给mfedTargetSchema赋值是加上ksName.dbName前缀）
+10、engine_test.go:
+	124		--> TestOpenFailedDueToExecErr
+	275		--> TestCreateOrUpdateTable
+	354/355		--> TestUpdatedMysqlStats			(都是在database前加ksName)
+11、tabletserver_test.go:
+	341		--> TestTabletServerSingleSchemaFailure
+	375		--> TestTabletServerAllSchemaFailure		(都是在database前加ksName)
+
+
+ParseFromInternalDBName
+1、normalizer.go		
+	48		--> MfedNormalize 				(发往mfed时去除ksName)
+2、vttablet/tabletserver/schema/schema.go
+	160		--> GenInternalName 				(获得schema)
+3、legacy_split_clone.go
+	583		--> copy 					(获得schema)
+4、go/vt/wrangeler/schema.go
+	420		--> CopySchemaShard 				(获得schema)
+
+
+
+ParseFromInternalDBNameWithKs
+
+1、engine.go		
+	237		--> ParseInternal 				(获得ksName, schema)
+2、keyspace_id_resolver.go
+	137		--> newKeyspaceIDResolverFactoryV3 		(获得schema）
+	
+	
+
+	
+
+
+
+	
+	
+	
+	

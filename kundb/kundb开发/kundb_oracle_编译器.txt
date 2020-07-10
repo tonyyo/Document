@@ -1,0 +1,5 @@
+编译器： 前端（sql语法词法生成ast）、中端（计划生成）、后端（针对底层的计算引擎进行不同实现，如spark的话，就是生成spark RDD的有向无环图）
+
+如inceptor的编译器：因为底层计算引擎是spark，所以就是生成spark RDD的有向无环图
+如kundb的编译器的话：因为底层引擎是innodb，所以应该就是生成sql语句。
+kundb的编译器开发的话，主要针对oracle编译器的话，那么前段就是对oracle的语法词法的解析，中端还是执行计划，后端的话可能就要在vtgate层实现pl，在mysql实现sql。
