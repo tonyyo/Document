@@ -67,6 +67,6 @@ gcb newBranch repoName/selectBranch
 python mysqlgroupby_test.py -v --skip-build --keep-logs --skip-teardown  // python测试
 
 docker run --net=host --rm -i -e GO111MODULE=off -v $(pwd):/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 make unit_test  // 单元测试
-
+docker run --net=host -i -e GO111MODULE=off -v /home/jenkins/agent/workspace/kundb/kundb-mergerequest-ci:/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess/ 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 bash -c 'make build && make test' 																					  // python测试
 
 

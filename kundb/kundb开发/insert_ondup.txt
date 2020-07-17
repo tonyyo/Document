@@ -1,0 +1,70 @@
+create database db;
+use db
+
+create table item1 (id int primary key, name varchar(20), price int);
+insert into item1 values (4,'d',200);
+insert into item1 (id, name, price) values(7,'d',50) on duplicate key update id=id+200;
+insert into item1 (id, name, price) values(4,'d',50), (5, 'd', 30), (7, 'd', 60) on duplicate key update id=id+100, name = 'f';
+select * from item1;
+
+create table item2 (id int primary key, name varchar(20), price int) partition by HASH(price) using hash;
+insert into item2 values (4,'d',200);
+insert into item2 (id, name, price) values(7,'d',50) on duplicate key update id=id+200;
+insert into item2 (id, name, price) values(4,'d',50), (5, 'd', 30), (7, 'd', 60) on duplicate key update id=id+100, name = 'f';
+select * from item2;
+
+create table item3 (id int primary key, name varchar(20), price int) partition by HASH(id) using hash;
+insert into item3 values (4,'d',200);
+insert into item3 (id, name, price) values(4,'d',50) on duplicate key update id=id+100;
+select * from item3;
+
+create table item4 (id int, id2 int, name varchar(20), price int, primary key (id, id2));
+insert into item4 values (4, 5, 'd',200);
+insert into item4 values(7, 6, 'd',50) on duplicate key update id=id+200;
+insert into item4 values(4, 8, 'd',50), (4, 5, 'd', 30) on duplicate key update id=id+100, name = 'f';
+select * from item4;
+
+create table item5 (id int, id2 int, name varchar(20), price int, primary key (id, id2)) partition by HASH(price) using hash;
+insert into item5 values (4, 5, 'd',200);
+insert into item5 values(7, 6, 'd',50) on duplicate key update id=id+200;
+insert into item5 values(4, 8, 'd',50), (4, 5, 'd', 30) on duplicate key update id=id+100, name = 'f';
+select * from item5;
+
+
+1、不是sharded table，含有ondup，ondup里不含有shard key
+2、columns里面含有唯一键，插入唯一键的列值不重复，执行insert,
+			插入唯一键的列值重复，执行update + where 唯一键 = 列值
+
+发现错误：多主键的时候不会创建lk表
+
+
+
+create database db;
+use db
+create table db.t1(id int);
+insert db.t1 values(1);
+select * from db.t1;
+create table db.t2(id int, name varchar(20)) partition by hash(id) using hash;
+
+create table db.parent(id INT not null, primary key (id)) partition by HASH(id) using hash;
+create table db.child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)); 
+
+alter table db.child add constraint fkk foreign key fk(parent_id) references db.parent(id);
+alter table db.child drop foreign key fkk;
+alter table db.child drop index fkk;
+
+create global index idx on t2(name);
+show table status;
+create table db.t3 like db.t1;
+
+create database db2;
+use db2
+create table t1(id int);
+use db
+create table db.t4 like db2.t1;
+
+create user u1;
+grant select on db.* to u1 ;
+
+create sequence s1;
+select next value for s1;

@@ -1,6 +1,6 @@
 
 
-ParseFromInternalDBName
+ParseFromInternalDBName																	done
 1、normalizer.go		
 	48		--> MfedNormalize 				(发往mfed时去除ksName)								
 2、vttablet/tabletserver/schema/schema.go
@@ -8,31 +8,33 @@ ParseFromInternalDBName
 3、legacy_split_clone.go
 	583		--> copy 					(获得schema)									
 4、go/vt/wrangeler/schema.go
-	420		--> CopySchemaShard 				(获得schema)									
+	420		--> CopySchemaShard 				(获得schema)									done						
 
 
 
-ParseFromInternalDBNameWithKs
+ParseFromInternalDBNameWithKs																done
 
 1、engine.go		
-	237		--> ParseInternal 				(获得ksName, schema)							     done				
+	237		--> ParseInternal 				(获得ksName, schema)							     					
 2、keyspace_id_resolver.go
 	137		--> newKeyspaceIDResolverFactoryV3 		(获得schema）	
 
-GenerateInternalDBName:
+
+
+GenerateInternalDBName:			
+6、table_scan.go:
+	61		--> getFullSchema				(当TableScan的tableName前缀不为空时）									
+2、schemautil.go:
+	134: 		--> ProcessShowCreateRes			(这个函数kundb没有用到）			
 1、server.go:
-	256/262: 	--> RegisterDatabase、RegisterTablesInDatabase	(其中的每个方法都用到了该函数, 用于在server上注册fake db和表）	
+	256/262: 	--> RegisterDatabase、RegisterTablesInDatabase	(其中的每个方法都用到了该函数, 用于在server上注册fake db和表）		   	done	
 10、engine_test.go:
 	124		--> TestOpenFailedDueToExecErr													
 	275		--> TestCreateOrUpdateTable													
-	354/355		--> TestUpdatedMysqlStats			(都是在database前加ksName)								
+	354/355		--> TestUpdatedMysqlStats			(都是在database前加ksName)							done								
 11、tabletserver_test.go:
 	341		--> TestTabletServerSingleSchemaFailure												
-	375		--> TestTabletServerAllSchemaFailure		(都是在database前加ksName)									
-2、schemautil.go:
-	134: 		--> ProcessShowCreateRes			(这个函数kundb没有用到）							
-6、table_scan.go:
-	61		--> getFullSchema				(当TableScan的tableName前缀不为空时）		
+	375		--> TestTabletServerAllSchemaFailure		(都是在database前加ksName)							done		
 4、vtexplain_vttablet.go:
 	162/184/185/208  --> initTabletEnvironment			(初始化Tablet环境时，在用到的数据库和表名前加上ksName)				done					
 3、ast.go:

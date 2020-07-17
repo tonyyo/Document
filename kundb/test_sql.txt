@@ -221,11 +221,9 @@ select * from cheap_item;
 create database db;
 use db
 create table parent(id INT not null, primary key (id)) partition by HASH(id) using hash;
-create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)) partition by HASH(id) using hash; 
-alter table child drop foreign key test;
+create table child(`id` int(0) not null, `parent_id` int(0) not null, primary key (`id`)); 
 
-
-alter table child add constraint fkk foreign key fk(id) references db.parent(id);
+alter table child add constraint fkk foreign key fk(parent_id) references db.parent(id);
 alter table db.child add foreign key fk(id) references db.parent(id);
 alter table db.child drop foreign key fkk;
 

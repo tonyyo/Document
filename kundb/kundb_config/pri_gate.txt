@@ -10,11 +10,28 @@ localhost:21811,localhost:21812,localhost:21813
 15002
 -grpc_port
 15992
--grpc_client_max_recv_message_size
-1073741824
 -mysql_server_port
 15306
 -mysql_auth_server_static_file
 "/home/vincent/gopath/src/github.com/youtube/vitess/examples/local_mfed/sub_scripts/mysql_auth_server_static_creds.json"
 -ip_config
-"/home/vincent/gopath/src/github.com/youtube/vitess/examples/local_mfed/sub_scripts/ip_config.json -cell test -cells_to_watch test -snowflake_id 31 -audit_sqls 1 -audit_filter=DCL, DDL, DML, INSERT, UPDATE, REPLACE, DELETE, SHOW, SET, TRANS, OTHER -audit_log_dir /home/vincent/gopath/vtdataroot/private/private/audit -tablet_types_to_wait MASTER,REPLICA -gateway_implementation discoverygateway -service_map grpc-vtgateservice -pid_file /home/vincent/gopath/vtdataroot/private/vtgate.pid -lower_case_table_names=true -enable_offload_engines=false -enable_cross_engine_tx=true -add_lockshare_seri=true -conn_count 2 -ldap_cache_max_size 200 -ldap_cache_expired_time 50s -idle_timeout -1 -web_protocol http -mysql_allow_clear_text_without_tls=true
+"/home/vincent/gopath/src/github.com/youtube/vitess/examples/local_mfed/sub_scripts/ip_config.json 
+-cell test 
+-cells_to_watch test 
+-snowflake_id 31 
+-audit_sqls 1 
+-audit_filter=DCL, DDL, DML, INSERT, UPDATE, REPLACE, DELETE, SHOW, SET, TRANS, OTHER 
+-audit_log_dir /home/vincent/gopath/vtdataroot/private/private/audit 
+-tablet_types_to_wait MASTER,REPLICA -gateway_implementation discoverygateway 
+-service_map grpc-vtgateservice 
+-pid_file /home/vincent/gopath/vtdataroot/private/vtgate.pid 
+-lower_case_table_names=true 
+-enable_offload_engines=false 
+-enable_cross_engine_tx=true 
+-add_lockshare_seri=true 
+-conn_count 2 
+-ldap_cache_max_size 200 
+-ldap_cache_expired_time 50s 
+-idle_timeout -1 
+-web_protocol http 
+-mysql_allow_clear_text_without_tls=true
