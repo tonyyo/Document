@@ -70,3 +70,15 @@ docker run --net=host --rm -i -e GO111MODULE=off -v $(pwd):/vt/src/github.com/yo
 docker run --net=host -i -e GO111MODULE=off -v /home/jenkins/agent/workspace/kundb/kundb-mergerequest-ci:/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess/ 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 bash -c 'make build && make test' 																					  // python测试
 
 
+free -mh  // 查看内存使用情况
+show variables like 'datadir';  // 查看系统表空间，创建的表数据库的都存在这里
+show variables like '%buffer%';  // 查看各种buffer的尺寸
+
+
+SET optimizer_trace='enabled=on';  // 开启跟踪优化
+然后执行sql，执行完之后，就可以通过以下堆栈信息查看执行详情了：
+
+SELECT * FROM information_schema.OPTIMIZER_TRACE\G;  
+
+
+
