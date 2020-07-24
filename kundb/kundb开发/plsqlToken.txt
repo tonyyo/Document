@@ -1,0 +1,1289 @@
+var keywords = map[string]int{
+	"accessible":          UNUSED,
+	"action":              ACTION,
+	"add":                 ADD,
+	"admin":               ADMIN,
+	"first":               FIRST,
+	"after":               AFTER,
+	"against":             AGAINST,
+	"algorithm":           ALGORITHM,
+	"all":                 ALL,
+	"alter":               ALTER,
+	"always":              ALWAYS,
+	"analyze":             ANALYZE,
+	"and":                 AND,
+	"as":                  AS,
+	"asc":                 ASC,
+	"authid":              AUTHID,
+	"asensitive":          UNUSED,
+	"auto_increment":      AUTO_INCREMENT,
+	"avg_row_length":      AVG_ROW_LENGTH,
+	"backend":             BACKEND,
+	"before":              BEFORE,
+	"begin":               BEGIN,
+	"between":             BETWEEN,
+	"bigint":              BIGINT,
+	"binary":              BINARY,
+	"binary_md5":          BINARY_MD5,
+	"bit":                 BIT,
+	"blob":                BLOB,
+	"body":                BODY,
+	"bool":                BOOL,
+	"boolean":             BOOLEAN,
+	"by":                  BY,
+	"cache":               CACHE,
+	"call":                CALL,
+	"cascade":             CASCADE,
+	"cascaded":            CASCADED,
+	"case":                CASE,
+	"cast":                CAST,
+	"change":              CHANGE,
+	"char":                CHAR,
+	"character":           CHARACTER,
+	"charset":             CHARSET,
+	"check":               CHECK,
+	"checksum":            CHECKSUM,
+	"clob":                CLOB,
+	"collate":             COLLATE,
+	"collation":           COLLATION,
+	"column":              COLUMN,
+	"comment":             COMMENT_KEYWORD,
+	"commit":              COMMIT,
+	"committed":           COMMITTED,
+	"compression":         COMPRESSION,
+	"condition":           UNUSED,
+	"connection":          CONNECTION,
+	"constraint":          CONSTRAINT,
+	"convert":             CONVERT,
+	"create":              CREATE,
+	"cross":               CROSS,
+	"current_date":        CURRENT_DATE,
+	"current_time":        CURRENT_TIME,
+	"current_timestamp":   CURRENT_TIMESTAMP,
+	"current_user":        CURRENT_USER,
+	"data":                DATA,
+	"database":            DATABASE,
+	"databases":           DATABASES,
+	"day_hour":            UNUSED,
+	"day_microsecond":     UNUSED,
+	"day_minute":          UNUSED,
+	"day_second":          UNUSED,
+	"date":                DATE,
+	"datetime":            DATETIME,
+	"decimal":             DECIMAL,
+	"declare":             UNUSED,
+	"default":             DEFAULT,
+	"deferrable":          DEFERRABLE,
+	"deferred":            DEFERRED,
+	"definer":             DEFINER,
+	"delay_key_write":     DELAY_KEY_WRITE,
+	"delayed":             UNUSED,
+	"delete":              DELETE,
+	"desc":                DESC,
+	"describe":            DESCRIBE,
+	"directory":           DIRECTORY,
+	"disk":                DISK,
+	"disable":             DISABLE,
+	"distinct":            DISTINCT,
+	"distinctrow":         UNUSED,
+	"div":                 DIV,
+	"double":              DOUBLE,
+	"drop":                DROP,
+	"duplicate":           DUPLICATE,
+	"each":                EACH,
+	"else":                ELSE,
+	"elseif":              UNUSED,
+	"enable":              ENABLE,
+	"enclosed":            UNUSED,
+	"encryption":          ENCRYPTION,
+	"end":                 END,
+	"engine":              ENGINE,
+	"engines":             ENGINES,
+	"enum":                ENUM,
+	"errors":              ERRORS,
+	"escape":              ESCAPE,
+	"escaped":             UNUSED,
+	"execute":             EXECUTE,
+	"exists":              EXISTS,
+	"explain":             EXPLAIN,
+	"expansion":           EXPANSION,
+	"extended":            EXTENDED,
+	"false":               FALSE,
+	"fetch":               FETCH,
+	"float":               FLOAT_TYPE,
+	"float4":              UNUSED,
+	"float8":              UNUSED,
+	"for":                 FOR,
+	"force":               FORCE,
+	"foreign":             FOREIGN,
+	"format":              FORMAT,
+	"from":                FROM,
+	"fulltext":            FULLTEXT,
+	"function":            FUNCTION,
+	"generated":           GENERATED,
+	"geometry":            GEOMETRY,
+	"geometrycollection":  GEOMETRYCOLLECTION,
+	"get":                 UNUSED,
+	"global":              GLOBAL,
+	"glkjoin":             GLKJOIN,
+	"grant":               GRANT,
+	"grants":              GRANTS,
+	"group":               GROUP,
+	"group_concat":        GROUP_CONCAT,
+	"concat":              CONCAT,
+	"hash":                HASH,
+	"having":              HAVING,
+	"high_priority":       UNUSED,
+	"hour_microsecond":    UNUSED,
+	"hour_minute":         UNUSED,
+	"hour_second":         UNUSED,
+	"if":                  IF,
+	"ignore":              IGNORE,
+	"immediate":           IMMEDIATE,
+	"in":                  IN,
+	"inceptor":            INCEPTOR,
+	"index":               INDEX,
+	"indexes":             INDEXES,
+	"infile":              UNUSED,
+	"initially":           INITIALLY,
+	"inner":               INNER,
+	"inout":               INOUT,
+	"insensitive":         UNUSED,
+	"insert":              INSERT,
+	"insert_method":       INSERT_METHOD,
+	"int":                 INT,
+	"int1":                UNUSED,
+	"int2":                UNUSED,
+	"int3":                UNUSED,
+	"int4":                UNUSED,
+	"int8":                UNUSED,
+	"integer":             INTEGER,
+	"interval":            INTERVAL,
+	"into":                INTO,
+	"introducer":          INTRODUCER,
+	"invoker":             INVOKER,
+	"io_after_gtids":      UNUSED,
+	"is":                  IS,
+	"isolation":           ISOLATION,
+	"join":                JOIN,
+	"json":                JSON,
+	"key":                 KEY,
+	"key_block_size":      KEY_BLOCK_SIZE,
+	"keys":                KEYS,
+	"kill":                UNUSED,
+	"language":            LANGUAGE,
+	"last_insert_id":      LAST_INSERT_ID,
+	"leave":               UNUSED,
+	"left":                LEFT,
+	"less":                LESS,
+	"level":               LEVEL,
+	"like":                LIKE,
+	"limit":               LIMIT,
+	"linear":              UNUSED,
+	"lines":               UNUSED,
+	"linestring":          LINESTRING,
+	"list":                LIST,
+	"load":                UNUSED,
+	"locate":              LOCATE,
+	"local":               LOCAL,
+	"localtime":           LOCALTIME,
+	"localtimestamp":      LOCALTIMESTAMP,
+	"lock":                LOCK,
+	"longblob":            LONGBLOB,
+	"longtext":            LONGTEXT,
+	"low_priority":        UNUSED,
+	"master_bind":         UNUSED,
+	"match":               MATCH,
+	"max_rows":            MAX_ROWS,
+	"maxvalue":            MAXVALUE,
+	"mediumblob":          MEDIUMBLOB,
+	"mediumint":           MEDIUMINT,
+	"mediumtext":          MEDIUMTEXT,
+	"memory":              MEMORY,
+	"merge":               MERGE,
+	"mfed":                MFED,
+	"middleint":           UNUSED,
+	"min_rows":            MIN_ROWS,
+	"minute_microsecond":  UNUSED,
+	"minute_second":       UNUSED,
+	"mod":                 MOD,
+	"mode":                MODE,
+	"modifies":            UNUSED,
+	"modify":              MODIFY,
+	"multilinestring":     MULTILINESTRING,
+	"multipoint":          MULTIPOINT,
+	"multipolygon":        MULTIPOLYGON,
+	"names":               NAMES,
+	"natural":             NATURAL,
+	"nchar":               NCHAR,
+	"next":                NEXT,
+	"no":                  NO,
+	"norely":              NORELY,
+	"nocopy":              NOCOPY,
+	"not":                 NOT,
+	"novalidate":          NOVALIDATE,
+	"no_write_to_binlog":  NO_WRITE_TO_BINLOG,
+	"null":                NULL,
+	"numeric":             NUMERIC,
+	"numeric_static_msp":  NUMERIC_STATIC_MAP,
+	"off":                 OFF,
+	"offset":              OFFSET,
+	"on":                  ON,
+	"only":                ONLY,
+	"optimize":            OPTIMIZE,
+	"optimizer_costs":     UNUSED,
+	"option":              OPTION,
+	"optionally":          UNUSED,
+	"or":                  OR,
+	"order":               ORDER,
+	"out":                 OUT,
+	"outer":               OUTER,
+	"outfile":             UNUSED,
+	"pack_keys":           PACK_KEYS,
+	"package":             PACKAGE,
+	"packages":            PACKAGES,
+	"partition":           PARTITION,
+	"partitions":          PARTITIONS,
+	"password":            PASSWORD,
+	"percent_rowtype":     PERCENT_ROWTYPE,
+	"percent_type":        PERCENT_TYPE,
+	"point":               POINT,
+	"polygon":             POLYGON,
+	"primary":             PRIMARY,
+	"privileges":          PRIVILEGES,
+	"procedure":           PROCEDURE,
+	"processlist":         PROCESSLIST,
+	"query":               QUERY,
+	"range":               RANGE,
+	"read":                READ,
+	"reads":               UNUSED,
+	"read_write":          UNUSED,
+	"real":                REAL,
+	"ref":                 REF,
+	"reference":           REFERENCE,
+	"references":          REFERENCES,
+	"regexp":              REGEXP,
+	"release":             UNUSED,
+	"rely":                RELY,
+	"remote_seq":          REMOTE_SEQ,
+	"rename":              RENAME,
+	"reorganize":          REORGANIZE,
+	"repair":              REPAIR,
+	"repeat":              UNUSED,
+	"repeatable":          REPEATABLE,
+	"replace":             REPLACE,
+	"replication":         REPLICATION,
+	"require":             UNUSED,
+	"resignal":            UNUSED,
+	"restrict":            RESTRICT,
+	"revoke":              REVOKE,
+	"reverse_bits":        REVERSE_BITS,
+	"right":               RIGHT,
+	"rlike":               REGEXP,
+	"role":                ROLE,
+	"rollback":            ROLLBACK,
+	"routine":             ROUTINE,
+	"row":                 ROW,
+	"row_format":          ROW_FORMAT,
+	"rownum":              ROWNUM,
+	"stats_auto_recalc":   STATS_AUTO_RECALC,
+	"stats_persistent":    STATS_PERSISTENT,
+	"stats_sample_pages":  STATS_SAMPLE_PAGES,
+	"schema":              SCHEMA,
+	"schemas":             SCHEMAS,
+	"second_microsecond":  UNUSED,
+	"security":            SECURITY,
+	"select":              SELECT,
+	"sensitive":           UNUSED,
+	"separator":           SEPARATOR,
+	"sequence":            SEQUENCE,
+	"serializable":        SERIALIZABLE,
+	"server":              SERVER,
+	"session":             SESSION,
+	"set":                 SET,
+	"shards":              SHARDS,
+	"share":               SHARE,
+	"show":                SHOW,
+	"signal":              UNUSED,
+	"signed":              SIGNED,
+	"smallint":            SMALLINT,
+	"spatial":             SPATIAL,
+	"specific":            UNUSED,
+	"sql":                 SQL,
+	"sqlexception":        UNUSED,
+	"sqlstate":            UNUSED,
+	"sqlwarning":          UNUSED,
+	"sql_big_result":      UNUSED,
+	"sql_cache":           SQL_CACHE,
+	"sql_calc_found_rows": UNUSED,
+	"sql_no_cache":        SQL_NO_CACHE,
+	"sql_small_result":    UNUSED,
+	"ssl":                 UNUSED,
+	"start":               START,
+	"starting":            UNUSED,
+	"storage":             STORAGE,
+	"stored":              STORED,
+	"straight_join":       STRAIGHT_JOIN,
+	"synonym":             SYNONYM,
+	"table":               TABLE,
+	"tables":              TABLES,
+	"columns":             COLUMNS,
+	"fields":              FIELDS,
+	"tablespace":          TABLESPACE,
+	"temporary":           TEMPORARY,
+	"temptable":           TEMPTABLE,
+	"terminated":          UNUSED,
+	"text":                TEXT,
+	"than":                THAN,
+	"then":                THEN,
+	"time":                TIME,
+	"timestamp":           TIMESTAMP,
+	"tinyblob":            TINYBLOB,
+	"tinyint":             TINYINT,
+	"tinytext":            TINYTEXT,
+	"to":                  TO,
+	"transaction":         TRANSACTION,
+	"tree":                TREE,
+	"traditional":         TRADITIONAL,
+	"trigger":             TRIGGER,
+	"triggers":            TRIGGERS,
+	"true":                TRUE,
+	"truncate":            TRUNCATE,
+	"type":                TYPE,
+	"uncommitted":         UNCOMMITTED,
+	"undefined":           UNDEFINED,
+	"undo":                UNUSED,
+	"unicode_loose_md5":   UNICODE_LOOSE_MD5,
+	"union":               UNION,
+	"unique":              UNIQUE,
+	"unlock":              UNUSED,
+	"unsigned":            UNSIGNED,
+	"update":              UPDATE,
+	"usage":               USAGE,
+	"use":                 USE,
+	"user":                USER,
+	"using":               USING,
+	"utc_date":            UTC_DATE,
+	"utc_time":            UTC_TIME,
+	"utc_timestamp":       UTC_TIMESTAMP,
+	"values":              VALUES,
+	"validate":            VALIDATE,
+	"varbinary":           VARBINARY,
+	"varchar":             VARCHAR,
+	"varcharacter":        UNUSED,
+	"variables":           VARIABLES,
+	"virtual":             VIRTUAL,
+	"view":                VIEW,
+	"kundb_checks":        KUNDB_CHECKS,
+	"kundb_keyspaces":     KUNDB_KEYSPACES,
+	"kundb_range_info":    KUNDB_RANGE_INFO,
+	"kundb_shards":        KUNDB_SHARDS,
+	"kundb_vindexes":      KUNDB_VINDEXES,
+	"vschema_tables":      VSCHEMA_TABLES,
+	"full":                FULL,
+	"warnings":            WARNINGS,
+	"when":                WHEN,
+	"where":               WHERE,
+	"with":                WITH,
+	"write":               WRITE,
+	"xor":                 UNUSED,
+	"year_month":          UNUSED,
+	"zerofill":            ZEROFILL,
+	"status":              STATUS,
+
+	// plsql keywords
+	"regular_id":                  REGULAR_ID,
+	"a_letter":                    A_LETTER,
+	"agent":                       AGENT,
+	"aggregate":                   AGGREGATE,
+	"array":                       ARRAY,
+	"associate":                   ASSOCIATE,
+	"at":                          AT,
+	"attribute":                   ATTRIBUTE,
+	"audit":                       AUDIT,
+	"auto":                        AUTO,
+	"automatic":                   AUTOMATIC,
+	"autonomous_transaction":      AUTONOMOUS_TRANSACTION,
+	"batch":                       BATCH,
+	"bfile":                       BFILE,
+	"binary_double":               BINARY_DOUBLE,
+	"binary_float":                BINARY_FLOAT,
+	"binary_integer":              BINARY_INTEGER,
+	"block":                       BLOCK,
+	"both":                        BOTH,
+	"bulk":                        BULK,
+	"byte":                        BYTE,
+	"c_letter":                    C_LETTER,
+	"canonical":                   CANONICAL,
+	"char_cs":                     CHAR_CS,
+	"chr":                         CHR,
+	"close":                       CLOSE,
+	"cluster":                     CLUSTER,
+	"collect":                     COLLECT,
+	"compatibility":               COMPATIBILITY,
+	"complete":                    COMPLETE,
+	"compile":                     COMPILE,
+	"compound":                    COMPOUND,
+	"constant":                    CONSTANT,
+	"constraints":                 CONSTRAINTS,
+	"constructor":                 CONSTRUCTOR,
+	"content":                     CONTENT,
+	"context":                     CONTEXT,
+	"continue":                    CONTINUE,
+	"corrupt_xid":                 CORRUPT_XID,
+	"corrupt_xid_all":             CORRUPT_XID_ALL,
+	"cost":                        COST,
+	"count":                       COUNT,
+	"cube":                        CUBE,
+	"cursor":                      CURSOR,
+	"customdatum":                 CUSTOMDATUM,
+	"cycle":                       CYCLE,
+	"day":                         DAY,
+	"db_role_change":              DB_ROLE_CHANGE,
+	"dbtimezone":                  DBTIMEZONE,
+	"debug":                       DEBUG,
+	"dec":                         DEC,
+	"decompose":                   DECOMPOSE,
+	"decrement":                   DECREMENT,
+	"defaults":                    DEFAULTS,
+	"deterministic":               DETERMINISTIC,
+	"dimension":                   DIMENSION,
+	"disassociate":                DISASSOCIATE,
+	"document":                    DOCUMENT,
+	"dsinterval_unconstrained":    DSINTERVAL_UNCONSTRAINED,
+	"element":                     ELEMENT,
+	"empty":                       EMPTY,
+	"encoding":                    ENCODING,
+	"entityescaping":              ENTITYESCAPING,
+	"err":                         ERR,
+	"evalname":                    EVALNAME,
+	"exception":                   EXCEPTION,
+	"exception_init":              EXCEPTION_INIT,
+	"exceptions":                  EXCEPTIONS,
+	"exclude":                     EXCLUDE,
+	"exit":                        EXIT,
+	"external":                    EXTERNAL,
+	"extract":                     EXTRACT,
+	"failure":                     FAILURE,
+	"final":                       FINAL,
+	"first_value":                 FIRST_VALUE,
+	"following":                   FOLLOWING,
+	"follows":                     FOLLOWS,
+	"forall":                      FORALL,
+	"grouping":                    GROUPING,
+	"hide":                        HIDE,
+	"hour":                        HOUR,
+	"include":                     INCLUDE,
+	"including":                   INCLUDING,
+	"increment":                   INCREMENT,
+	"indent":                      INDENT,
+	"indexed":                     INDEXED,
+	"indicator":                   INDICATOR,
+	"indices":                     INDICES,
+	"infinite":                    INFINITE,
+	"inline":                      INLINE,
+	"instantiable":                INSTANTIABLE,
+	"instead":                     INSTEAD,
+	"invalidate":                  INVALIDATE,
+	"iterate":                     ITERATE,
+	"java":                        JAVA,
+	"keep":                        KEEP,
+	"last":                        LAST,
+	"last_value":                  LAST_VALUE,
+	"leading":                     LEADING,
+	"library":                     LIBRARY,
+	"like2":                       LIKE2,
+	"like4":                       LIKE4,
+	"likec":                       LIKEC,
+	"link":                        LINK,
+	"locked":                      LOCKED,
+	"log":                         LOG,
+	"logoff":                      LOGOFF,
+	"logon":                       LOGON,
+	"long":                        LONG,
+	"loop":                        LOOP,
+	"main":                        MAIN,
+	"map":                         MAP,
+	"matched":                     MATCHED,
+	"measures":                    MEASURES,
+	"member":                      MEMBER,
+	"minimum":                     MINIMUM,
+	"minute":                      MINUTE,
+	"minvalue":                    MINVALUE,
+	"mlslabel":                    MLSLABEL,
+	"model":                       MODEL,
+	"month":                       MONTH,
+	"multiset":                    MULTISET,
+	"name":                        NAME,
+	"nan":                         NAN,
+	"naturaln":                    NATURALN,
+	"nav":                         NAV,
+	"nchar_cs":                    NCHAR_CS,
+	"nclob":                       NCLOB,
+	"nested":                      NESTED,
+	"new":                         NEW,
+	"noaudit":                     NOAUDIT,
+	"nocycle":                     NOCYCLE,
+	"noentityescaping":            NOENTITYESCAPING,
+	"none":                        NONE,
+	"noschemacheck":               NOSCHEMACHECK,
+	"nulls":                       NULLS,
+	"number":                      NUMBER,
+	"nvarchar2":                   NVARCHAR2,
+	"object":                      OBJECT,
+	"oid":                         OID,
+	"old":                         OLD,
+	"open":                        OPEN,
+	"operator":                    OPERATOR,
+	"oradata":                     ORADATA,
+	"ordinality":                  ORDINALITY,
+	"oserror":                     OSERROR,
+	"over":                        OVER,
+	"overriding":                  OVERRIDING,
+	"parallel_enable":             PARALLEL_ENABLE,
+	"parameters":                  PARAMETERS,
+	"parent":                      PARENT,
+	"passing":                     PASSING,
+	"path":                        PATH,
+	"pipelined":                   PIPELINED,
+	"plan":                        PLAN,
+	"pls_integer":                 PLS_INTEGER,
+	"positive":                    POSITIVE,
+	"positiven":                   POSITIVEN,
+	"pragma":                      PRAGMA,
+	"preceding":                   PRECEDING,
+	"precision":                   PRECISION,
+	"present":                     PRESENT,
+	"prior":                       PRIOR,
+	"program":                     PROGRAM,
+	"raise":                       RAISE,
+	"raw":                         RAW,
+	"record":                      RECORD,
+	"referencing":                 REFERENCING,
+	"reject":                      REJECT,
+	"relies_on":                   RELIES_ON,
+	"respect":                     RESPECT,
+	"restrict_references":         RESTRICT_REFERENCES,
+	"result":                      RESULT,
+	"result_cache":                RESULT_CACHE,
+	"return":                      RETURN,
+	"returning":                   RETURNING,
+	"reuse":                       REUSE,
+	"reverse":                     REVERSE,
+	"rollup":                      ROLLUP,
+	"rowid":                       ROWID,
+	"rows":                        ROWS,
+	"rules":                       RULES,
+	"sample":                      SAMPLE,
+	"save":                        SAVE,
+	"savepoint":                   SAVEPOINT,
+	"schemacheck":                 SCHEMACHECK,
+	"scn":                         SCN,
+	"second":                      SECOND,
+	"seed":                        SEED,
+	"segment":                     SEGMENT,
+	"self":                        SELF,
+	"sequential":                  SEQUENTIAL,
+	"serially_reusable":           SERIALLY_REUSABLE,
+	"servererror":                 SERVERERROR,
+	"sessiontimezone":             SESSIONTIMEZONE,
+	"sets":                        SETS,
+	"settings":                    SETTINGS,
+	"shutdown":                    SHUTDOWN,
+	"siblings":                    SIBLINGS,
+	"signtype":                    SIGNTYPE,
+	"simple_integer":              SIMPLE_INTEGER,
+	"single":                      SINGLE,
+	"skip_":                       SKIP_,
+	"snapshot":                    SNAPSHOT,
+	"some":                        SOME,
+	"specification":               SPECIFICATION,
+	"sqldata":                     SQLDATA,
+	"sqlerror":                    SQLERROR,
+	"standalone":                  STANDALONE,
+	"startup":                     STARTUP,
+	"statement":                   STATEMENT,
+	"statement_id":                STATEMENT_ID,
+	"static":                      STATIC,
+	"statistics":                  STATISTICS,
+	"store":                       STORE,
+	"substr":                      SUBSTR,
+	"submultiset":                 SUBMULTISET,
+	"subpartition":                SUBPARTITION,
+	"substitutable":               SUBSTITUTABLE,
+	"subtype":                     SUBTYPE,
+	"success":                     SUCCESS,
+	"suspend":                     SUSPEND,
+	"sysdate":                     SYSDATE,
+	"timestamp_ltz_unconstrained": TIMESTAMP_LTZ_UNCONSTRAINED,
+	"timestamp_tz_unconstrained":  TIMESTAMP_TZ_UNCONSTRAINED,
+	"timestamp_unconstrained":     TIMESTAMP_UNCONSTRAINED,
+	"timezone_abbr":               TIMEZONE_ABBR,
+	"timezone_hour":               TIMEZONE_HOUR,
+	"timezone_minute":             TIMEZONE_MINUTE,
+	"timezone_region":             TIMEZONE_REGION,
+	"trailing":                    TRAILING,
+	"translate":                   TRANSLATE,
+	"treat":                       TREAT,
+	"trim":                        TRIM,
+	"unbounded":                   UNBOUNDED,
+	"under":                       UNDER,
+	"unlimited":                   UNLIMITED,
+	"until":                       UNTIL,
+	"updated":                     UPDATED,
+	"upsert":                      UPSERT,
+	"urowid":                      UROWID,
+	"users":                       USERS,
+	"varchar2":                    VARCHAR2,
+	"variable":                    VARIABLE,
+	"varray":                      VARRAY,
+	"varying":                     VARYING,
+	"version":                     VERSION,
+	"versions":                    VERSIONS,
+	"wait":                        WAIT,
+	"warning":                     WARNING,
+	"wellformed":                  WELLFORMED,
+	"whenever":                    WHENEVER,
+	"while":                       WHILE,
+	"within":                      WITHIN,
+	"work":                        WORK,
+	"xml":                         XML,
+	"xmlagg":                      XMLAGG,
+	"xmlattributes":               XMLATTRIBUTES,
+	"xmlcast":                     XMLCAST,
+	"xmlcolattval":                XMLCOLATTVAL,
+	"xmlelement":                  XMLELEMENT,
+	"xmlexists":                   XMLEXISTS,
+	"xmlforest":                   XMLFOREST,
+	"xmlnamespaces":               XMLNAMESPACES,
+	"xmlparse":                    XMLPARSE,
+	"xmlpi":                       XMLPI,
+	"xmlquery":                    XMLQUERY,
+	"xmlroot":                     XMLROOT,
+	"xmlserialize":                XMLSERIALIZE,
+	"xmltable":                    XMLTABLE,
+	"xmltype":                     XMLTYPE,
+	"year":                        YEAR,
+	"yes":                         YES,
+	"yminterval_unconstrained":    YMINTERVAL_UNCONSTRAINED,
+	"zone":                        ZONE,
+	"prediction":                  PREDICTION,
+	"prediction_bounds":           PREDICTION_BOUNDS,
+	"prediction_cost":             PREDICTION_COST,
+	"prediction_details":          PREDICTION_DETAILS,
+	"prediction_probability":      PREDICTION_PROBABILITY,
+	"prediction_set":              PREDICTION_SET,
+	"cume_dist":                   CUME_DIST,
+	"dense_rank":                  DENSE_RANK,
+	"listagg":                     LISTAGG,
+	"percent_rank":                PERCENT_RANK,
+	"percentile_cont":             PERCENTILE_CONT,
+	"percentile_disc":             PERCENTILE_DISC,
+	"rank":                        RANK,
+	"avg":                         AVG,
+	"corr":                        CORR,
+	"lag":                         LAG,
+	"lead":                        LEAD,
+	"max":                         MAX,
+	"median":                      MEDIAN,
+	"min":                         MIN,
+	"ntile":                       NTILE,
+	"ratio_to_report":             RATIO_TO_REPORT,
+	"row_number":                  ROW_NUMBER,
+	"sum":                         SUM,
+	"variance":                    VARIANCE,
+	"regr_":                       REGR_,
+	"stddev":                      STDDEV,
+	"var_":                        VAR_,
+	"covar_":                      COVAR_,
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+native_datatype_element:
+  BINARY_INTEGER
+| PLS_INTEGER
+| NATURAL
+| BINARY_FLOAT
+| BINARY_DOUBLE
+| NATURALN
+| POSITIVE
+| POSITIVEN
+| SIGNTYPE
+| SIMPLE_INTEGER
+| NVARCHAR2
+| DEC
+| INTEGER
+| INT
+| NUMERIC
+| SMALLINT
+| NUMBER
+| DECIMAL
+| DOUBLE PRECISION
+| DOUBLE
+| FLOAT
+| REAL
+| NCHAR
+| LONG RAW
+| LONG
+| CHAR
+| CHARACTER
+| VARCHAR2
+| VARCHAR
+| STRING
+| RAW
+| BOOLEAN
+| DATE
+| ROWID
+| UROWID
+| YEAR
+| MONTH
+| DAY
+| HOUR
+| MINUTE
+| SECOND
+| TIMEZONE_HOUR
+| TIMEZONE_MINUTE
+| TIMEZONE_REGION
+| TIMEZONE_ABBR
+| TIMESTAMP
+| TIMESTAMP_UNCONSTRAINED
+| TIMESTAMP_TZ_UNCONSTRAINED
+| TIMESTAMP_LTZ_UNCONSTRAINED
+| YMINTERVAL_UNCONSTRAINED
+| DSINTERVAL_UNCONSTRAINED
+| BFILE
+| BLOB
+| CLOB
+| NCLOB
+| MLSLABEL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+regular_id:
+  REGULAR_ID
+| A_LETTER
+| ADD
+| AFTER
+| AGENT
+| AGGREGATE
+| ANALYZE
+| ARRAY
+| ASSOCIATE
+| AT
+| ATTRIBUTE
+| AUDIT
+| AUTHID
+| AUTO
+| AUTOMATIC
+| AUTONOMOUS_TRANSACTION
+| BATCH
+| BEFORE
+| BFILE
+| BINARY_DOUBLE
+| BINARY_FLOAT
+| BINARY_INTEGER
+| BLOB
+| BLOCK
+| BODY
+| BOOLEAN
+| BOTH
+| BULK
+| BYTE
+| C_LETTER
+| CALL
+| CANONICAL
+| CASCADE
+| CAST
+| CHAR
+| CHAR_CS
+| CHARACTER
+| CHR
+| CLOB
+| CLOSE
+| CLUSTER
+| COLLECT
+| COLUMNS
+| COMMENT
+| COMMIT
+| COMMITTED
+| COMPATIBILITY
+| COMPLETE
+| COMPILE
+| COMPOUND
+| CONSTANT
+| CONSTRAINT
+| CONSTRAINTS
+| CONSTRUCTOR
+| CONTENT
+| CONTEXT
+| CONTINUE
+| CONVERT
+| CORRUPT_XID
+| CORRUPT_XID_ALL
+| COST
+| COUNT
+| CROSS
+| CUBE
+| CURRENT_USER
+| CURSOR
+| CUSTOMDATUM
+| CYCLE
+| DATA
+| DATABASE
+| DAY
+| DB_ROLE_CHANGE
+| DBTIMEZONE
+| DEBUG
+| DEC
+| DECIMAL
+| DECOMPOSE
+| DECREMENT
+| DEFAULTS
+| DEFERRED
+| DEFINER
+| DELETE
+| DETERMINISTIC
+| DIMENSION
+| DISABLE
+| DISASSOCIATE
+| DOCUMENT
+| DOUBLE
+| DSINTERVAL_UNCONSTRAINED
+| EACH
+| ELEMENT
+| EMPTY
+| ENABLE
+| ENCODING
+| ENTITYESCAPING
+| ERR
+| ERRORS
+| ESCAPE
+| EVALNAME
+| EXCEPTION
+| EXCEPTION_INIT
+| EXCEPTIONS
+| EXCLUDE
+| EXECUTE
+| EXISTS
+| EXIT
+| EXPLAIN
+| EXTERNAL
+| EXTRACT
+| FAILURE
+| FINAL
+| FIRST
+| FIRST_VALUE
+| FLOAT
+| FOLLOWING
+| FOLLOWS
+| FORALL
+| FORCE
+| FULL
+| FUNCTION
+| GROUPING
+| HASH
+| HIDE
+| HOUR
+| ID
+| IGNORE
+| IMMEDIATE
+| INCLUDE
+| INCLUDING
+| INCREMENT
+| INDENT
+| INDEXED
+| INDICATOR
+| INDICES
+| INFINITE
+| INLINE
+| INNER
+| INOUT
+| INSTANTIABLE
+| INSTEAD
+| INT
+| INTEGER
+| INTERVAL
+| INVALIDATE
+| ISOLATION
+| ITERATE
+| JAVA
+| JOIN
+| KEEP
+| KEY
+| LANGUAGE
+| LAST
+| LAST_VALUE
+| LEADING
+| LEFT
+| LEVEL
+| LIBRARY
+| LIKE2
+| LIKE4
+| LIKEC
+| LIMIT
+| LINK
+| LOCAL
+| LOCKED
+| LOG
+| LOGOFF
+| LOGON
+| LONG
+| LOOP
+| MAIN
+| MAP
+| MATCHED
+| MAXVALUE
+| MEASURES
+| MEMBER
+| MERGE
+| MINIMUM
+| MINUTE
+| MINVALUE
+| MLSLABEL
+| MODEL
+| MODIFY
+| MONTH
+| MULTISET
+| NAME
+| NAN
+| NATURAL
+| NATURALN
+| NAV
+| NCHAR
+| NCHAR_CS
+| NCLOB
+| NESTED
+| NEW
+| NEXT
+| NO
+| NOAUDIT
+| NOCOPY
+| NOCYCLE
+| NOENTITYESCAPING
+| NONE
+| NOSCHEMACHECK
+| NULLS
+| NUMBER
+| NUMERIC
+| NVARCHAR2
+| OBJECT
+| OFF
+| OID
+| OLD
+| ONLY
+| OPEN
+| OPERATOR
+| ORADATA
+| ORDINALITY
+| OSERROR
+| OUT
+| OUTER
+| OVER
+| OVERRIDING
+| PACKAGE
+| PARALLEL_ENABLE
+| PARAMETERS
+| PARENT
+| PARTITION
+| PASSING
+| PATH
+| PIPELINED
+| PLAN
+| PLS_INTEGER
+| POSITIVE
+| POSITIVEN
+| PRAGMA
+| PRECEDING
+| PRECISION
+| PRESENT
+| PRIOR
+| PROGRAM
+| RAISE
+| RANGE
+| RAW
+| READ
+| REAL
+| RECORD
+| REF
+| REFERENCE
+| REFERENCING
+| REJECT
+| RELIES_ON
+| RENAME
+| REPLACE
+| RESPECT
+| RESTRICT_REFERENCES
+| RESULT
+| RESULT_CACHE
+| RETURN
+| RETURNING
+| REUSE
+| REVERSE
+| RIGHT
+| ROLLBACK
+| ROLLUP
+| ROW
+| ROWID
+| ROWS
+| RULES
+| SAMPLE
+| SAVE
+| SAVEPOINT
+| SCHEMA
+| SCHEMACHECK
+| SCN
+| SECOND
+| SEED
+| SEGMENT
+| SELF
+| SEQUENTIAL
+| SERIALIZABLE
+| SERIALLY_REUSABLE
+| SERVERERROR
+| SESSIONTIMEZONE
+| SET
+| SETS
+| SETTINGS
+| SHOW
+| SHUTDOWN
+| SIBLINGS
+| SIGNTYPE
+| SIMPLE_INTEGER
+| SINGLE
+| SKIP_
+| SMALLINT
+| SNAPSHOT
+| SOME
+| SPECIFICATION
+| SQL
+| SQLDATA
+| SQLERROR
+| STANDALONE
+| STARTUP
+| STATEMENT
+| STATEMENT_ID
+| STATIC
+| STATISTICS
+| STRING
+| STORE
+| SUBSTR
+| SUBMULTISET
+| SUBPARTITION
+| SUBSTITUTABLE
+| SUBTYPE
+| SUCCESS
+| SUSPEND
+| SYSDATE
+| TEMPORARY
+| TIME
+| TIMESTAMP
+| TIMESTAMP_LTZ_UNCONSTRAINED
+| TIMESTAMP_TZ_UNCONSTRAINED
+| TIMESTAMP_UNCONSTRAINED
+| TIMEZONE_ABBR
+| TIMEZONE_HOUR
+| TIMEZONE_MINUTE
+| TIMEZONE_REGION
+| TRAILING
+| TRANSACTION
+| TRANSLATE
+| TREAT
+| TRIGGER
+| TRIM
+| TRUNCATE
+| TYPE
+| UNBOUNDED
+| UNDER
+| UNLIMITED
+| UNTIL
+| UPDATED
+| UPSERT
+| UROWID
+| USE
+| USER
+| USERS
+| VALIDATE
+| VALUE
+| VARCHAR
+| VARCHAR2
+| VARIABLE
+| VARRAY
+| VARYING
+| VERSION
+| VERSIONS
+| WAIT
+| WARNING
+| WELLFORMED
+| WHENEVER
+| WHILE
+| WITHIN
+| WORK
+| WRITE
+| XML
+| XMLAGG
+| XMLATTRIBUTES
+| XMLCAST
+| XMLCOLATTVAL
+| XMLELEMENT
+| XMLEXISTS
+| XMLFOREST
+| XMLNAMESPACES
+| XMLPARSE
+| XMLPI
+| XMLQUERY
+| XMLROOT
+| XMLSERIALIZE
+| XMLTABLE
+| XMLTYPE
+| YEAR
+| YES
+| YMINTERVAL_UNCONSTRAINED
+| ZONE
+| PREDICTION
+| PREDICTION_BOUNDS
+| PREDICTION_COST
+| PREDICTION_DETAILS
+| PREDICTION_PROBABILITY
+| PREDICTION_SET
+| CUME_DIST
+| DENSE_RANK
+| LISTAGG
+| PERCENT_RANK
+| PERCENTILE_CONT
+| PERCENTILE_DISC
+| RANK
+| AVG
+| CORR
+| LAG
+| LEAD
+| MAX
+| MEDIAN
+| MIN
+| NTILE
+| RATIO_TO_REPORT
+| ROW_NUMBER
+| SUM
+| VARIANCE
+| REGR_
+| STDDEV
+| VAR_
+| COVAR_
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

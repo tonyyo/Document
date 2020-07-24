@@ -80,5 +80,9 @@ SET optimizer_trace='enabled=on';  // 开启跟踪优化
 
 SELECT * FROM information_schema.OPTIMIZER_TRACE\G;  
 
+ReadQueryResult是真正连接mysql数据库的地方
+tableserver.go是vttablet开始的地方
+gate和tablet的连接池在connection_pool.go文件中，里面有个Get函数，利用的是通道chan。
+
 
 
