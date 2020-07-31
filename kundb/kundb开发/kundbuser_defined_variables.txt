@@ -44,3 +44,12 @@ executor.go修改款项：
 计划：
 1、将vitess最新代码拉下来，看是否有所改进
 2、找到现有vitss里vttablet解析bindvar的地方
+
+
+
+全局变量中的session级别的变量：
+kundb不支持不加session关键字的session变量？
+mysql支持修改全局变量不影响已经创建的连接的session的变量，只会影响后面创建连接的session变量
+
+
+

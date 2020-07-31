@@ -84,5 +84,9 @@ ReadQueryResult是真正连接mysql数据库的地方
 tableserver.go是vttablet开始的地方
 gate和tablet的连接池在connection_pool.go文件中，里面有个Get函数，利用的是通道chan。
 
+换镜像之tag重命名本地镜像： docker tag 172.16.1.99/kundb-ci/x86_64/kundb:kundb-1.3-gxb-poc 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
+push到私有仓库： docker push 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
+更新manager上的镜像：172.16.179.60:8180 admin/admin
+
 
 
