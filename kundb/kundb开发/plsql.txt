@@ -1,1 +1,10 @@
-不支持名字和参数连在一起用， 这是我们词法解析器的问题。
+plsql存在的潜在问题归纳:
+1. 前期开发时很多地方用到了select_statement, 当时用的都是kundb自带的select_statement, 需要替换
+2. 需要检查oracle的其他crud指令和mysql的crud指令的异同,因为前期开发时用的都是kundb自带的
+3. expression的重写工作
+4. datatype的完善
+5. native_datatype_element的补充和解冲突
+6. id_expression的完善
+7. regular_id的补充和解冲突
+8. 很多要用到identifier的地方我都用的id/sql_id
+9. 建议重新走一遍create package/ create package body的流程

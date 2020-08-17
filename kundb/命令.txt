@@ -84,9 +84,72 @@ ReadQueryResult是真正连接mysql数据库的地方
 tableserver.go是vttablet开始的地方
 gate和tablet的连接池在connection_pool.go文件中，里面有个Get函数，利用的是通道chan。
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 换镜像之tag重命名本地镜像： docker tag 172.16.1.99/kundb-ci/x86_64/kundb:kundb-1.3-gxb-poc 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
 push到私有仓库： docker push 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
 更新manager上的镜像：172.16.179.60:8180 admin/admin
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+启动oracle容器:
+拉取镜像：docker pull 172.16.1.99/studio/common_db/oracle:11g
+
+创建挂载目录并赋权：
+
+mkdir -p /data/oracle
+
+chmod -R 777 /data/oracle
+
+启动容器：docker run -d --net host -v /data/oracle1:/u01/app/oracle/ --name oracle11 172.16.1.99/studio/common_db/oracle:11g
+
+各参数含义：
+
+--net host ：host网络模式，即容器网络环境和宿主机一模一样。设置为host模式意味着容器和宿主机不能进行端口映射，所以要保证默认的1521端口没有被占用
+
+-d ：后台运行容器
+
+-v /data/oracle1:/u01/app/oracle/ ：容器挂载
+
+--name oracle11 ：设置容器名
+
+查看状态：启动完成后可通过docker ps -a查看容器运行状态
+
+查看日志：可通过docker logs <container id/name> 查看容器启动日志
+
+以下步骤创建新的用户：
+
+1、进入容器：docker exec -it <container id/name> bash 
+
+2、容器内切换到oracle用户：su - oracle 
+
+3、超级用户登陆Oracle：
+
+sqlplus /nolog
+
+conn /as sysdba
+
+4、创建新用户：
+
+create user <username> identified by <password>;
+
+alter user <username> account unlock;
+
+5、赋予权限：
+
+grant create session to <username>
+
+grant dba to <username> (管理员权限)
+
+6、退出容器
+
+防火墙设置：
+
+firewall-cmd --zone=public --add-port=1521/tcp --permanent
+
+firewall-cmd --reload
+
+完成之后即可用新的用户进行访问
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
 
