@@ -7,4 +7,4 @@ plsql存在的潜在问题归纳:
 6. id_expression的完善
 7. regular_id的补充和解冲突
 8. 很多要用到identifier的地方我都用的id/sql_id
-9. 建议重新走一遍create package/ create package body的流程
+9. DOUBLE_POINT TOKEN

@@ -1,0 +1,145 @@
+Linux命令行
+====================================================
+free -mh  // 查看内存使用情况
+find / -name ssl 2>/dev/null  // 查找文件, 并抛弃错误输出
+
+
+
+git
+====================================================
+git log --name-only 查看该文件最近的修改是谁
+git stash 暂存到栈中
+git pop 出栈
+git list 查看栈中内容
+
+git reset --hard commit-id  回退到该版本
+
+git checkout -b 分支名 origin/分支名  // 从一个分支上创建一个新分支
+git log -p  分支名  // 查看该分支的日志
+
+git 拉取他人分支
+git remote add repoName repoAddress
+git fetch repoName
+gcb newBranch repoName/selectBranch
+
+
+docker
+====================================================
+docker ps  // 查看容器
+docker images  //查看镜像
+docker run -it -name [指定容器名称] [镜像名称] /bin/bah    // 创建容器并进入命令行界面
+docker exec -it [command ID] /bin/bash   // 进入容器命令行界面
+docker stop [command ID]   //  停止容器
+docker rm -f [command ID]   // 删除容器
+
+换镜像之tag重命名本地镜像： docker tag 172.16.1.99/kundb-ci/x86_64/kundb:kundb-1.3-gxb-poc 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
+push到私有仓库： docker push 127.0.0.1:5000/transwarp/kundb:kundb-1.2.1-final
+更新manager上的镜像：172.16.179.60:8180 admin/admin
+
+
+kundb测试
+=====================================================
+python mysqlgroupby_test.py -v --skip-build --keep-logs --skip-teardown  // python测试
+
+docker run --net=host --rm -i -e GO111MODULE=off -v $(pwd):/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 make unit_test  // 单元测试
+docker run --net=host -i -e GO111MODULE=off -v /home/jenkins/agent/workspace/kundb/kundb-mergerequest-ci:/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess/ 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 bash -c 'make build && make test' 
+
+
+kundb进入mysql
+=====================================================
+mysql -uroot -pTranswarp! -P17100 -h127.0.0.1   // 进mysql
+
+
+
+scp
+=====================================================
+scp root@107.172.27.254:/home/test.txt .   //下载文件
+
+scp test.txt root@107.172.27.254:/home  //上传文件
+
+scp -r root@107.172.27.254:/home/test .  //下载目录
+
+scp -r test root@107.172.27.254:/home   //上传目录
+
+ssh root@172.26.0.93  // 远程登录
+
+
+
+vim
+=====================================================
+vi与shell切换
+:shell 可以在不关闭vi的情况下切换到shell命令行
+:exit 从shell回到vi
+
+横向切割窗口
+:split+窗口名，也可以简写为:sp+窗口名
+纵向切割窗口名
+:vsplit+窗口名，也可以简写为：vsp+窗口名
+双击ctrl+w依次切换窗口。
+:e 在该窗口打开文件
+
+
+启动容器示范 oracle
+============================================================
+启动oracle容器:
+拉取镜像：docker pull 172.16.1.99/studio/common_db/oracle:11g
+
+创建挂载目录并赋权：
+
+mkdir -p /data/oracle
+
+chmod -R 777 /data/oracle
+
+启动容器：docker run -d --net host -v /data/oracle1:/u01/app/oracle/ --name oracle11 172.16.1.99/studio/common_db/oracle:11g
+
+各参数含义：
+
+--net host ：host网络模式，即容器网络环境和宿主机一模一样。设置为host模式意味着容器和宿主机不能进行端口映射，所以要保证默认的1521端口没有被占用
+
+-d ：后台运行容器
+
+-v /data/oracle1:/u01/app/oracle/ ：容器挂载
+
+--name oracle11 ：设置容器名
+
+查看状态：启动完成后可通过docker ps -a查看容器运行状态
+
+查看日志：可通过docker logs <container id/name> 查看容器启动日志
+
+以下步骤创建新的用户：
+
+1、进入容器：docker exec -it <container id/name> bash 
+
+2、容器内切换到oracle用户：su - oracle 
+
+3、超级用户登陆Oracle：
+
+sqlplus /nolog
+
+conn /as sysdba
+
+4、创建新用户：
+
+create user <username> identified by <password>;
+
+alter user <username> account unlock;
+
+5、赋予权限：
+
+grant create session to <username>
+
+grant dba to <username> (管理员权限)
+
+6、退出容器
+
+防火墙设置：
+
+firewall-cmd --zone=public --add-port=1521/tcp --permanent
+
+firewall-cmd --reload
+
+完成之后即可用新的用户进行访问
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+

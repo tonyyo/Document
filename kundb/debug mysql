@@ -1,0 +1,14 @@
+cmake \
+-DCMAKE_INSTALL_PREFIX=/home/vincent/mysqlCode/mysql_data/8.0 \
+-DMYSQL_DATADIR=/home/vincent/mysqlCode/mysql_data/8.0/data \
+-DSYSCONFDIR=/home/vincent/mysqlCode/mysql_data/8.0 \
+-DMYSQL_UNIX_ADDR=/home/vincent/mysqlCode/mysql_data/8.0/data/mysql.sock \
+-DWITH_DEBUG=1  \
+-DDOWNLOAD_BOOST=1 -DWITH_BOOST=/home/vincent/mysqlCode/boost_1_72_0 \
+-DFORCE_INSOURCE_BUILD=1
+
+
+安装cmake
+下载源码解压, 然后创建软连接
+ln -sf /usr/local/cmake-3.18.2-Linux-x86_64/bin/*  /usr/bin/ 
+cmake --version
