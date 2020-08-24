@@ -4,6 +4,12 @@ free -mh  // 查看内存使用情况
 find / -name ssl 2>/dev/null  // 查找文件, 并抛弃错误输出
 
 
+Ubuntu配置
+====================================================
+清华镜像源地址: https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+网友总结镜像源地址:https://blog.csdn.net/xiangxianghehe/article/details/105688062
+
+
 
 git
 ====================================================
@@ -67,6 +73,8 @@ ssh root@172.26.0.93  // 远程登录
 
 vim
 =====================================================
+ggdG: 删除全文
+
 vi与shell切换
 :shell 可以在不关闭vi的情况下切换到shell命令行
 :exit 从shell回到vi
