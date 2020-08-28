@@ -1,1 +1,1 @@
-VTROOT=/home/vincent/gopath;MYSQL_FLAVOR=MySQL56;VTDATAROOT=/home/vincent/gopath/vtdataroot;GOROOT=/usr/local/go
+VTROOT=/home/vincent/go;MYSQL_FLAVOR=MySQL56;VTDATAROOT=/home/vincent/go/vtdataroot;GOROOT=/usr/local/go

@@ -1,5 +1,5 @@
-安装cmake
-1、下载  https://cmake.org/download/
+1
+下载、安装cmake  https://cmake.org/download/
 2、sudo apt-get install g++
 3、sudo apt-get install libssl-dev
 4、cd cmake目录 ./bootstrap
