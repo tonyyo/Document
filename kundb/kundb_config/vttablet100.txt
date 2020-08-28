@@ -5,7 +5,7 @@ localhost:21811,localhost:21812,localhost:21813
 -topo_global_root
 /kundb/global
 -log_dir
-/home/vincent/gopath/vtdataroot/vt_0000000100/tmp
+/home/transwarp/gopath/vtdataroot/vt_0000000100/tmp
 -tablet-path
 test-0000000100
 -init_keyspace
@@ -29,9 +29,9 @@ grpc-queryservice,grpc-tabletmanager,grpc-updatestream
 -snowflake_id
 100
 -audit_log_dir
-/home/vincent/gopath/vtdataroot/vt_0000000100/audit
+/home/transwarp/gopath/vtdataroot/vt_0000000100/audit
 -pid_file
-/home/vincent/gopath/vtdataroot/vt_0000000100/vttablet.pid
+/home/transwarp/gopath/vtdataroot/vt_0000000100/vttablet.pid
 -vtctld_addr
 http://vincent:15000/
 -v
@@ -75,3 +75,7 @@ utf8
 300
 -queryserver-config-transaction-timeout
 3000
+-grpc_auth_static_password_file
+/home/vincent/go/src/github.com/youtube/vitess/examples/local_mfed/sub_scripts/grpc_static_auth.json
+-grpc_auth_static_client_creds
+/home/vincent/go/src/github.com/youtube/vitess/examples/local_mfed/sub_scripts/grpc_static_client_auth.json

@@ -2,6 +2,14 @@ Linux命令行
 ====================================================
 free -mh  // 查看内存使用情况
 find / -name ssl 2>/dev/null  // 查找文件, 并抛弃错误输出
+cat ~/.gitconfig  // 查看git名和邮箱
+sudo tar xzvf mysql57.tar.gz -C /usr/local  // 解压到制定目录
+whereis python2  // 查找二进制文件
+sudo ln -s ./python2.7 /usr/bin/python 
+hostname -f  // 查看主机名
+ip a		// 查看ip
+apt-cache search <package>   // 查看可安装的包名
+apt-get remove [--purge] <package> // 自动移除<package>以及任何依此存包的其它包。 --purge指明包应被完全清除。
 
 
 Ubuntu配置

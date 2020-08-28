@@ -1,14 +1,22 @@
-cmake \
+安装cmake
+1、下载  https://cmake.org/download/
+2、sudo apt-get install g++
+3、sudo apt-get install libssl-dev
+4、cd cmake目录 ./bootstrap
+5、make 
+
+
+进入mysql源码目录/home/vincent/mysqlCode/mysql-server
+mkdir -p build
+cd build
+rm ../CmakeCache.txt
+
+cmake .. \
 -DCMAKE_INSTALL_PREFIX=/home/vincent/mysqlCode/mysql_data/8.0 \
 -DMYSQL_DATADIR=/home/vincent/mysqlCode/mysql_data/8.0/data \
 -DSYSCONFDIR=/home/vincent/mysqlCode/mysql_data/8.0 \
 -DMYSQL_UNIX_ADDR=/home/vincent/mysqlCode/mysql_data/8.0/data/mysql.sock \
 -DWITH_DEBUG=1  \
--DDOWNLOAD_BOOST=1 -DWITH_BOOST=/home/vincent/mysqlCode/boost_1_72_0 \
--DFORCE_INSOURCE_BUILD=1
+-DDOWNLOAD_BOOST=1 -DWITH_BOOST=/home/vincent/mysqlCode/boost
 
 
-安装cmake
-下载源码解压, 然后创建软连接
-ln -sf /usr/local/cmake-3.18.2-Linux-x86_64/bin/*  /usr/bin/ 
-cmake --version
