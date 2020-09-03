@@ -10,6 +10,9 @@ hostname -f  // 查看主机名
 ip a		// 查看ip
 apt-cache search <package>   // 查看可安装的包名
 apt-get remove [--purge] <package> // 自动移除<package>以及任何依此存包的其它包。 --purge指明包应被完全清除。
+sudo apt-get install aptitude   // 安装aptitude
+sudo aptitude install <package>
+
 
 
 Ubuntu配置
@@ -36,7 +39,9 @@ git remote add repoName repoAddress
 git fetch repoName
 gcb newBranch repoName/selectBranch
 
+git cherry-pick + commitID
 
+git clean -df  // 清除所有未跟踪的文件
 docker
 ====================================================
 docker ps  // 查看容器

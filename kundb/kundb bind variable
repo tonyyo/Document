@@ -1,0 +1,46 @@
+KUNDB BINDVARIABLE概述:
+
+       create database db;
+
+       use db;
+
+       create table t1(id int, age int, name varchar(20));
+
+       insert t1 values(1, 2, "vincent");
+
+       insert t1 values(2, 3, "tony");
+
+       select id, age, name from t1 where id = 1;
+
+       select id, age, name from t1 where id = 2;
+
+       select * from t1 where id in (1, 2, 3);
+
+       select * from t1 where id in (4, 5, 6);  
+
+       如上， 当sql格式相同，只是某些变量值不同时， 重复生成相同执行计划， 消耗性能， 所以kundb实现了BINDVARIABLE， 在对sql进行parser时， 会将变量替换成以':vtg‘或‘::vtg'，生成新的sql，  并对其生成执行计划plan， 并以normkey = schema + ':' + normalize 为key值， plan为value，以键值对的形式缓存执行计划， 后续sql只要格式相同， 就能利用normkey， 找到执行计划， 返回即可， 无需重新生成执行计划， 这一过程，在kundb中称为Normalize， normkey如下:
+
+       db : insert into db.t1(id, age, name) values (:vtg1, :vtg2, :vtg3)
+
+       db : select id, age, name from t1 where id = :vtg1
+
+       db : select * from t1 where id in ::vtg1
+
+
+
+KUNDB BINDVARIABLE代码流程跟踪:
+1、对sql进行parser， 得到ast
+2、调用Walk函数遍历ast:
+      I、当节点类型为SQLVal中的Int、Str、Float类型时，将节点的类型和值记录到BindVariable类型结构体bval， 将该节点替换为ValArg类型， 将其值设为':vtg+counter', 其中counter为全局计数器, 最后存入一个全局map，格式为bindVars[vtg+counter] = bval，  在vttabelet层进行sql的还原。
+      II、当节点类型为ComparisonExpr类型， 并且当node.right为Tuple类型时，将节点的类型和值记录到BindVriable类型结构体bvals， 将node.right替换为ListArgs类型， 并将其值替换为'::vtg+counter',  存入全局map，格式为bindVars[vtg+counter] = bvals，  在vttabelet层进行sql的还原。
+
+           注: bval和bvals都是BindVariable类型， 其中Type记录了其类型， Value记录的是Int、Str、Float类型值， Values记录的是Tuple类型值。
+
+     III、将语法树parse成new sql， 也就是上面讲的normalized， 并对其生成执行计划...
+3、将new sql和bindVars传到vttablet层， vttablet层将调用generateFinalSQL函数对sql进行还原。
+
+另: 若对sql手动进行prepare， kundb支持sql中的变量替换为'?'的语法, 如select * from t1 where id in (？, ？, ？)， 但不会走Normalize过程，因为sql语句中并不包含上述变量， 而是在进行token解析时， 直接将'?'替换为‘:v+tkn.posVarIndex', 由Tokenizer维持一个全局计数器posVarIndex， 并替换为ValArg类型， 将ast序列化后， 得到新的sql:  select * from t1 where id in (:v1, :v2, :v3)。
+
+      在PLSQL中，存在着以":"开头的BINDVARIABLE， 如: CREATE PACKAGE BODY pack1 IS FUNCTION get_bal(acc_no IN NUMBER) RETURN NUMBER IS BEGIN :abc := 1; END; END pack1; 处理流程暂时和KUNDB处理'?'一样， 会将“:<varaible_name>"识别成ValArg类型， 但是其值保留，将ast序列化后，sql维持不变。
+
+
