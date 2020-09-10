@@ -1,6 +1,6 @@
 Parameters: -v --skip-teardown --keep-logs --skip-build
 
-Environment: PYTHONUNBUFFERED=1;VTROOT=/home/vincent/gopath;VTDATAROOT=/home/vincent/gopath/vtdataroot;VTTOP=/home/vincent/gopath/src/github.com/youtube/vitess;VT_MYSQL_ROOT=/usr/local/mysql57;MYSQL_FLAVOR=MySQL56;JAVA_HOME=/usr/local/jdk1.8.0_201
+Environment: PYTHONUNBUFFERED=1;VTROOT=/home/vincent/gopath;VTDATAROOT=/home/vincent/go/vtdataroot;VTTOP=/home/vincent/go/src/github.com/youtube/vitess;VT_MYSQL_ROOT=/usr/local/mysql57;MYSQL_FLAVOR=MySQL56;JAVA_HOME=/usr/local/jdk1.8.0_201
 
 cd gk/py
 /home/vincent/pythonTestEnv/venv/bin/python setup.py install
