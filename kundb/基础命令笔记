@@ -68,6 +68,9 @@ vitess目录下：  make test
 cd test
 python alter_table.py -v --skip-teardown --keep-logs --skip-build
 
+// 跑unit_test_race
+make unit_test_race
+
 // 单元测试
 docker run --net=host --rm -i -e GO111MODULE=off -v $(pwd):/vt/src/github.com/youtube/vitess -w /vt/src/github.com/youtube/vitess 172.16.1.99/kundb-ci/x86_64/bootstrap-ci:go1.14 make unit_test 
 
