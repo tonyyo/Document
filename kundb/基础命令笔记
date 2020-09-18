@@ -29,7 +29,9 @@ git stash 暂存到栈中
 git pop 出栈
 git list 查看栈中内容
 
-git reset --hard commit-id  回退到该版本
+git reset --hard commit-id  // 强制回退到该版本，抛弃之后修改的代码
+git reset commit-id   // 回退到该版本，保留之后修改的代码
+
 
 git checkout -b 分支名 origin/分支名  // 从一个分支上创建一个新分支
 git log -p  分支名  // 查看该分支的日志
@@ -44,6 +46,15 @@ git cherry-pick + commitID
 git clean -df  // 清除所有未跟踪的文件
 
 git commit --amend  // 修改提交信息
+
+git branch -d // 删除分支
+
+git push vincent 本地分支名：远端分支名   // 推送不同名分支
+
+// 多个人在同一个分支上进行开发时，为保证git log的顺序
+1、本地建一个同名分支保证和远程同步
+2、基于最新分支创建开发分支
+3、开发分支开发完， 本地同名分支拉到最新， 在开发分支进行rebase， 命令为git rebase 本地同名分支
 
 docker
 ====================================================
